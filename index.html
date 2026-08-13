@@ -3,164 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart BMI Dashboard</title>
+    <title>Advanced Smart BMI Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         /* Modern CSS Reset and Base Styles */
         * {
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
         }
         
         body {
-            background-color: #121212; /* Sleek dark background */
+            /* Animated Gradient Background */
+            background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #121212);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            margin: 0;
+            padding: 20px;
         }
 
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Card */
         .dashboard-card {
-            background: #1e1e24;
+            background: rgba(30, 30, 36, 0.65);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            border-radius: 24px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.5);
             width: 100%;
-            max-width: 450px;
+            max-width: 480px;
+            transition: all 0.3s ease;
         }
 
         h2 {
             text-align: center;
-            margin-top: 0;
+            margin-bottom: 25px;
             color: #ffffff;
-            letter-spacing: 1px;
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Unit Toggle Switch */
+        .toggle-container {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            color: white;
         }
 
         .input-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
-            color: #a0a0a0;
-            font-size: 14px;
+            color: #b3b3b3;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input {
             width: 100%;
-            padding: 15px;
-            background: #2a2a35;
-            border: 2px solid #2a2a35;
-            border-radius: 10px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
             color: white;
             font-size: 16px;
-            transition: 0.3s;
+            transition: all 0.3s;
         }
 
         input:focus {
             outline: none;
             border-color: #00d2ff;
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
         }
 
-        button {
+        button.calc-btn {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             background: linear-gradient(45deg, #00d2ff, #3a7bd5);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(58, 123, 213, 0.4);
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+        button.calc-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(58, 123, 213, 0.6);
         }
 
-        /* --- Unique Result Area Styles --- */
+        button.calc-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Error Shake Animation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b) !important;
+            box-shadow: 0 8px 20px rgba(255, 65, 108, 0.4) !important;
+        }
+
+        /* Result Area */
         .result-area {
-            margin-top: 30px;
+            margin-top: 35px;
             text-align: center;
-            display: none; /* Hidden until calculated */
-            animation: fadeIn 0.5s ease-in-out;
+            display: none;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 25px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .bmi-value {
-            font-size: 3.5rem;
-            font-weight: bold;
-            margin: 10px 0;
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 5px 0;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
         .bmi-category {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 20px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
         }
 
-        /* Visual Gauge */
+        /* Advanced Dynamic Gauge */
+        .gauge-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
         .gauge-track {
             width: 100%;
-            height: 12px;
-            background: #333;
-            border-radius: 10px;
+            height: 14px;
+            background: #2a2a2a;
+            border-radius: 20px;
             overflow: hidden;
-            margin-bottom: 15px;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        .gauge-fill {
-            height: 100%;
-            width: 0%; /* Will be changed by JS */
-            background: #2ecc71; 
-            border-radius: 10px;
-            transition: width 1s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 1s;
+        /* Gradient background indicating zones */
+        .gauge-zones {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to right, 
+                #3498db 0%, #3498db 14%, /* Underweight */
+                #2ecc71 14%, #2ecc71 40%, /* Normal */
+                #f1c40f 40%, #f1c40f 60%, /* Overweight */
+                #e74c3c 60%, #e74c3c 100% /* Obese */
+            );
+            opacity: 0.3;
+        }
+
+        .gauge-marker {
+            position: absolute;
+            top: -4px;
+            height: 22px;
+            width: 6px;
+            background: #ffffff;
+            border-radius: 3px;
+            box-shadow: 0 0 8px rgba(255,255,255,0.8);
+            left: 0%; /* Changed by JS */
+            transition: left 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 2;
+        }
+
+        /* Ideal Weight Section */
+        .ideal-weight-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00d2ff;
+        }
+
+        .ideal-weight-box p {
+            margin: 0;
+            font-size: 13px;
+            color: #b3b3b3;
+        }
+
+        .ideal-weight-box strong {
+            display: block;
+            font-size: 16px;
+            color: #fff;
+            margin-top: 5px;
         }
 
         .tips {
             font-size: 14px;
-            color: #a0a0a0;
-            background: #2a2a35;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
+            color: #d1d1d1;
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
 
     <div class="dashboard-card">
-        <h2>⚡ Smart BMI Tracker</h2>
+        <h2>⚡ Smart BMI Pro</h2>
         
+        <!-- Unit Toggle -->
+        <div class="toggle-container">
+            <div class="toggle-btn active" id="btnMetric" onclick="setUnit('metric')">Metric (kg/cm)</div>
+            <div class="toggle-btn" id="btnImperial" onclick="setUnit('imperial')">Imperial (lbs/in)</div>
+        </div>
+
         <div class="input-group">
-            <label>Weight (in Kilograms)</label>
+            <label id="lblWeight">Weight (Kilograms)</label>
             <input type="number" id="weight" placeholder="e.g. 70" step="0.1">
         </div>
 
         <div class="input-group">
-            <label>Height (in Centimeters)</label>
-            <input type="number" id="height" placeholder="e.g. 175">
+            <label id="lblHeight">Height (Centimeters)</label>
+            <input type="number" id="height" placeholder="e.g. 175" step="0.1">
         </div>
 
-        <button onclick="calculateBMI()">Calculate Health Status</button>
+        <button class="calc-btn" id="calcBtn" onclick="calculateBMI()">Analyze Health Status</button>
 
-        <!-- Unique Visual Result Section -->
+        <!-- Advanced Visual Result Section -->
         <div class="result-area" id="resultBox">
-            <div class="gauge-track">
-                <div class="gauge-fill" id="gaugeBar"></div>
+            
+            <div class="gauge-container">
+                <div class="gauge-track">
+                    <div class="gauge-zones"></div>
+                </div>
+                <!-- This marker slides to the correct BMI position -->
+                <div class="gauge-marker" id="gaugeMarker"></div>
             </div>
             
             <div class="bmi-value" id="bmiNumber">0.0</div>
             <div class="bmi-category" id="bmiStatus">Status</div>
             
+            <div class="ideal-weight-box">
+                <p>Your Healthy Weight Range:</p>
+                <strong id="idealWeightText">-- kg to -- kg</strong>
+            </div>
+
             <div class="tips" id="healthTip">
                 <!-- Advice generated by JS -->
             </div>
@@ -168,70 +301,132 @@
     </div>
 
     <script>
-        function calculateBMI() {
-            // 1. Get user inputs
-            let weight = parseFloat(document.getElementById('weight').value);
-            let heightCm = parseFloat(document.getElementById('height').value);
+        let currentUnit = 'metric';
 
-            // Validation: Make sure inputs are correct numbers
-            if (isNaN(weight) || isNaN(heightCm) || weight <= 0 || heightCm <= 0) {
-                alert("Please enter valid positive numbers for weight and height.");
+        function setUnit(unit) {
+            currentUnit = unit;
+            document.getElementById('weight').value = '';
+            document.getElementById('height').value = '';
+            document.getElementById('resultBox').style.display = 'none';
+
+            if (unit === 'metric') {
+                document.getElementById('btnMetric').classList.add('active');
+                document.getElementById('btnImperial').classList.remove('active');
+                document.getElementById('lblWeight').innerText = "Weight (Kilograms)";
+                document.getElementById('weight').placeholder = "e.g. 70";
+                document.getElementById('lblHeight').innerText = "Height (Centimeters)";
+                document.getElementById('height').placeholder = "e.g. 175";
+            } else {
+                document.getElementById('btnImperial').classList.add('active');
+                document.getElementById('btnMetric').classList.remove('active');
+                document.getElementById('lblWeight').innerText = "Weight (Pounds)";
+                document.getElementById('weight').placeholder = "e.g. 150";
+                document.getElementById('lblHeight').innerText = "Height (Inches)";
+                document.getElementById('height').placeholder = "e.g. 68 (for 5'8\")";
+            }
+        }
+
+        function triggerError() {
+            const btn = document.getElementById('calcBtn');
+            btn.classList.add('error-shake');
+            btn.innerText = "Invalid Input!";
+            setTimeout(() => {
+                btn.classList.remove('error-shake');
+                btn.innerText = "Analyze Health Status";
+            }, 1000);
+        }
+
+        function calculateBMI() {
+            let weight = parseFloat(document.getElementById('weight').value);
+            let height = parseFloat(document.getElementById('height').value);
+
+            if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+                triggerError();
                 return;
             }
 
-            // 2. BMI Math Logic
-            // Formula: Weight(kg) / (Height(m) * Height(m))
-            let heightMeters = heightCm / 100;
-            let bmi = weight / (heightMeters * heightMeters);
-            bmi = bmi.toFixed(1); // Round to 1 decimal place
+            let bmi = 0;
+            let heightMeters = 0;
+
+            // 1. BMI Calculation based on units
+            if (currentUnit === 'metric') {
+                heightMeters = height / 100;
+                bmi = weight / (heightMeters * heightMeters);
+            } else {
+                // Imperial formula: 703 x weight(lbs) / [height(in)]^2
+                bmi = 703 * (weight / (height * height));
+                heightMeters = height * 0.0254; // Convert inches to meters for ideal weight math
+            }
+
+            bmi = parseFloat(bmi.toFixed(1));
+
+            // 2. Calculate Ideal Weight (Target BMI 18.5 to 24.9)
+            let minWeightKg = 18.5 * (heightMeters * heightMeters);
+            let maxWeightKg = 24.9 * (heightMeters * heightMeters);
+            
+            let idealWeightText = "";
+            if (currentUnit === 'metric') {
+                idealWeightText = `${minWeightKg.toFixed(1)} kg - ${maxWeightKg.toFixed(1)} kg`;
+            } else {
+                let minWeightLbs = minWeightKg * 2.20462;
+                let maxWeightLbs = maxWeightKg * 2.20462;
+                idealWeightText = `${minWeightLbs.toFixed(1)} lbs - ${maxWeightLbs.toFixed(1)} lbs`;
+            }
 
             // 3. Determine Category, Colors, and Tips
             let category = "";
             let color = "";
             let tip = "";
-            let gaugePercentage = 0;
 
             if (bmi < 18.5) {
                 category = "Underweight 🧊";
-                color = "#3498db"; // Blue
-                tip = "Try incorporating more nutrient-dense foods and healthy fats into your diet to build mass safely.";
-                gaugePercentage = 25; // Fill bar 25%
-            } 
-            else if (bmi >= 18.5 && bmi <= 24.9) {
+                color = "#3498db";
+                tip = "Focus on nutrient-dense foods like nuts, avocados, and proteins to build healthy mass safely.";
+            } else if (bmi >= 18.5 && bmi <= 24.9) {
                 category = "Normal Weight ✅";
-                color = "#2ecc71"; // Green
-                tip = "Great job! Keep maintaining your current balanced diet and active lifestyle.";
-                gaugePercentage = 50; // Fill bar 50%
-            } 
-            else if (bmi >= 25 && bmi <= 29.9) {
+                color = "#2ecc71";
+                tip = "Excellent! You are in the healthy range. Keep up the balanced diet and regular physical activity.";
+            } else if (bmi >= 25 && bmi <= 29.9) {
                 category = "Overweight ⚠️";
-                color = "#f39c12"; // Orange
-                tip = "Consider adding 30 minutes of daily cardio and monitoring your caloric intake.";
-                gaugePercentage = 75; // Fill bar 75%
-            } 
-            else {
+                color = "#f1c40f";
+                tip = "Consider slight caloric deficit and increasing daily cardiovascular activities like walking or cycling.";
+            } else {
                 category = "Obese 🚨";
-                color = "#e74c3c"; // Red
-                tip = "It is highly recommended to consult a healthcare provider for a personalized health plan.";
-                gaugePercentage = 100; // Fill bar 100%
+                color = "#e74c3c";
+                tip = "Prioritize your health by consulting a healthcare provider or nutritionist for a personalized wellness plan.";
             }
 
-            // 4. Update the HTML/UI
+            // 4. Calculate Gauge Marker Position
+            // Assuming the visible scale on the gauge represents BMI 15 to 40
+            let minScale = 15;
+            let maxScale = 40;
+            let percentage = ((bmi - minScale) / (maxScale - minScale)) * 100;
+            
+            // Clamp the percentage between 0% and 100% so the marker doesn't fly off the screen
+            if (percentage < 0) percentage = 0;
+            if (percentage > 100) percentage = 100;
+
+            // 5. Update UI Elements
             document.getElementById('bmiNumber').innerText = bmi;
+            document.getElementById('bmiNumber').style.color = color;
             
             let statusElement = document.getElementById('bmiStatus');
             statusElement.innerText = category;
             statusElement.style.color = color;
             
+            document.getElementById('idealWeightText').innerText = idealWeightText;
             document.getElementById('healthTip').innerText = tip;
 
-            // Animate the gauge bar
-            let gaugeBar = document.getElementById('gaugeBar');
-            gaugeBar.style.width = gaugePercentage + "%";
-            gaugeBar.style.backgroundColor = color;
+            // Update marker position
+            document.getElementById('gaugeMarker').style.left = percentage + "%";
+            document.getElementById('gaugeMarker').style.backgroundColor = color;
+            document.getElementById('gaugeMarker').style.boxShadow = `0 0 10px ${color}`;
 
-            // Show the result area smoothly
+            // Show result area smoothly
             document.getElementById('resultBox').style.display = "block";
+            
+            // Smooth scroll to result if on mobile
+            document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     </script>
 </body>
