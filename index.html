@@ -1,388 +1,388 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Smart BMI & Diet Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>AURA | Elite Fitness & Gaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* CSS Variables for Theming */
+        /* Energetic Gamified Theme */
         :root {
-            /* Dark Theme (Default) */
-            --bg-1: #0f2027; --bg-2: #203a43; --bg-3: #2c5364; --bg-4: #121212;
-            --card-bg: rgba(30, 30, 36, 0.75);
-            --text-main: #ffffff;
-            --text-muted: #b3b3b3;
-            --input-bg: rgba(0, 0, 0, 0.2);
-            --input-border: rgba(255, 255, 255, 0.1);
-            --box-shadow: rgba(0, 0, 0, 0.5);
-            --stat-bg: rgba(255, 255, 255, 0.05);
-            --diet-bg: rgba(0, 0, 0, 0.2);
+            --bg-body: #050505;
+            --bg-card: #11131a;
+            --bg-input: #1a1d24;
+            --border-color: #2a2f3a;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            
+            /* Neon Accents */
+            --neon-green: #39ff14;
+            --neon-blue: #00f3ff;
+            --neon-purple: #b026ff;
+            --neon-red: #ff003c;
+            --neon-orange: #ffaa00;
+
+            --font-main: 'Inter', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        [data-theme="light"] {
-            /* Light Theme */
-            --bg-1: #fdfbfb; --bg-2: #ebedee; --bg-3: #e2ebf0; --bg-4: #cfd9df;
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --text-main: #1a1a1a;
-            --text-muted: #555555;
-            --input-bg: rgba(0, 0, 0, 0.05);
-            --input-border: rgba(0, 0, 0, 0.1);
-            --box-shadow: rgba(0, 0, 0, 0.1);
-            --stat-bg: rgba(0, 0, 0, 0.03);
-            --diet-bg: rgba(255, 255, 255, 0.6);
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Base Styles */
-        * {
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.4s ease, color 0.4s ease;
-        }
-        
         body {
-            background: linear-gradient(-45deg, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-4));
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            background-color: var(--bg-body); color: var(--text-primary);
+            font-family: var(--font-main); min-height: 100vh;
+            display: flex; justify-content: center; align-items: center; padding: 20px;
+            overflow-x: hidden; position: relative;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Background Floating Doodles */
+        .doodle {
+            position: absolute; font-size: 2rem; opacity: 0.15;
+            animation: float 8s ease-in-out infinite; z-index: 0; pointer-events: none;
+        }
+        .d1 { top: 10%; left: 5%; animation-delay: 0s; font-size: 3rem;}
+        .d2 { top: 70%; left: 8%; animation-delay: 2s; font-size: 2.5rem;}
+        .d3 { top: 20%; right: 10%; animation-delay: 1s; font-size: 3.5rem;}
+        .d4 { top: 80%; right: 5%; animation-delay: 3s; font-size: 2rem;}
+        .d5 { top: 40%; left: 50%; animation-delay: 4s; font-size: 4rem; opacity: 0.05;}
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(15deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
         }
 
-        .dashboard-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--input-border);
-            padding: 35px;
-            border-radius: 24px;
-            box-shadow: 0 25px 45px var(--box-shadow);
-            width: 100%;
-            max-width: 550px;
-            position: relative;
+        .app-layout {
+            display: flex; flex-direction: column; width: 100%; max-width: 1200px;
+            background: rgba(17, 19, 26, 0.85); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px;
+            overflow: hidden; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 243, 255, 0.1);
+            z-index: 10;
         }
 
-        /* Theme Toggle Button */
-        .theme-toggle {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            background: var(--input-bg);
-            border: 1px solid var(--input-border);
-            color: var(--text-main);
-            padding: 8px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        @media (min-width: 950px) { .app-layout { flex-direction: row; min-height: 750px; } }
+
+        /* SIDEBAR (INPUTS) */
+        .sidebar {
+            background: linear-gradient(180deg, var(--bg-card) 0%, #0a0b0f 100%);
+            width: 100%; padding: 40px 30px; border-right: 1px solid var(--border-color);
+            display: flex; flex-direction: column;
         }
+        @media (min-width: 950px) { .sidebar { width: 400px; } }
 
-        .theme-toggle:hover {
-            background: rgba(0, 210, 255, 0.2);
-            border-color: #00d2ff;
-        }
+        .header { margin-bottom: 30px; }
+        .logo { font-size: 2.5rem; font-weight: 900; font-style: italic; display: flex; align-items: center; gap: 12px; letter-spacing: -1px; text-transform: uppercase;}
+        .logo span { color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); }
+        .tagline { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-top: 5px; text-transform: uppercase; letter-spacing: 2px; }
 
-        h2 {
-            text-align: left;
-            margin-bottom: 25px;
-            color: var(--text-main);
-            font-weight: 700;
-            font-size: 1.8rem;
-        }
+        /* Toggle & Inputs */
+        .unit-toggle { display: flex; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
+        .toggle-btn { flex: 1; padding: 12px; text-align: center; cursor: pointer; font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); transition: var(--transition); text-transform: uppercase;}
+        .toggle-btn.active { background: rgba(0, 243, 255, 0.15); color: var(--neon-blue); border-bottom: 2px solid var(--neon-blue);}
 
-        .toggle-container {
-            display: flex;
-            background: var(--input-bg);
-            border-radius: 12px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            border: 1px solid var(--input-border);
-        }
+        .form-section { display: flex; flex-direction: column; gap: 15px; }
+        .input-group { display: flex; flex-direction: column; gap: 8px; position: relative; }
+        .row { display: flex; gap: 15px; }
+        .row .input-group { flex: 1; }
 
-        .toggle-btn {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .toggle-btn.active {
-            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
-            color: white;
-        }
-
-        .row-group { display: flex; gap: 15px; margin-bottom: 20px; }
-        .input-group { flex: 1; margin-bottom: 20px; position: relative; }
-        .row-group .input-group { margin-bottom: 0; }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
+        label { font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;}
         input, select {
-            width: 100%;
-            padding: 14px;
-            background: var(--input-bg);
-            border: 2px solid var(--input-border);
-            border-radius: 12px;
-            color: var(--text-main);
-            font-size: 15px;
-            appearance: none;
+            width: 100%; padding: 14px 16px; background: var(--bg-input); border: 1px solid var(--border-color);
+            border-radius: 12px; color: var(--text-primary); font-family: var(--font-main); font-size: 0.95rem; font-weight: 600; outline: none; transition: var(--transition);
         }
+        input:focus, select:focus { border-color: var(--neon-blue); background: #1c222d; box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); }
+        .live-hint { font-size: 0.75rem; color: var(--neon-blue); margin-top: 4px; font-weight: 600; }
 
-        select option {
-            background: var(--card-bg);
-            color: var(--text-main);
+        .btn-primary {
+            margin-top: 15px; background: linear-gradient(90deg, var(--neon-blue), #0077ff); color: #000; border: none;
+            padding: 18px; border-radius: 12px; font-weight: 900; font-size: 1.1rem; letter-spacing: 1px; text-transform: uppercase;
+            cursor: pointer; transition: var(--transition); box-shadow: 0 10px 20px rgba(0, 243, 255, 0.3);
         }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 243, 255, 0.5); }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: #00d2ff;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+        /* MAIN DASHBOARD */
+        .dashboard {
+            flex: 1; padding: 40px; display: none; flex-direction: column; gap: 30px;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; max-height: 90vh;
         }
+        .dashboard::-webkit-scrollbar { width: 6px; }
+        .dashboard::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
-        .conversion-hint {
-            font-size: 12px;
-            color: #00d2ff;
-            margin-top: 6px;
-            font-weight: 500;
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-title { font-size: 1.3rem; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid rgba(255,255,255,0.05); padding-bottom: 10px;}
+        .section-title span { color: var(--neon-green); }
+
+        /* MINIGAME SECTION */
+        .game-card {
+            background: linear-gradient(45deg, #1a1a2e, #16213e); border: 2px dashed var(--neon-purple);
+            border-radius: 16px; padding: 25px; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; overflow: hidden;
         }
-
-        button.calc-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 5px;
-            box-shadow: 0 8px 20px rgba(58, 123, 213, 0.4);
-        }
-
-        button.calc-btn:hover { transform: translateY(-3px); }
-
-        .error-shake {
-            animation: shake 0.4s ease-in-out;
-            background: linear-gradient(45deg, #ff416c, #ff4b2b) !important;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        /* Result Area */
-        .result-area {
-            margin-top: 30px;
-            display: none;
-            animation: slideUp 0.6s ease;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .bmi-value {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin: 5px 0;
-            line-height: 1;
-        }
-
-        .bmi-category {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        /* Stats Grid */
-        .detailed-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .stat-box {
-            background: var(--stat-bg);
-            padding: 15px;
-            border-radius: 12px;
-            border-left: 3px solid #00d2ff;
-        }
-
-        .stat-box.full { grid-column: span 2; }
-        .stat-box p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
-        .stat-box strong { font-size: 16px; color: var(--text-main); }
+        .game-title { font-size: 1.2rem; font-weight: 800; color: var(--neon-purple); text-transform: uppercase; margin-bottom: 5px; }
+        .game-desc { font-size: 0.85rem; color: #a1a1aa; margin-bottom: 20px; }
         
-        .macro-row {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 8px;
-            font-size: 13px;
-            color: var(--text-main);
-            font-weight: 600;
-        }
-        .macro-row span { padding: 4px 8px; border-radius: 6px; background: rgba(0,0,0,0.2); }
-
-        /* Diet Section */
-        .diet-section {
-            background: var(--diet-bg);
-            padding: 20px;
-            border-radius: 16px;
-            border: 1px solid var(--input-border);
-        }
-
-        .diet-section h3 {
-            font-size: 16px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-main);
-        }
-
-        .meal-item {
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px dashed var(--input-border);
-        }
-        .meal-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .animation-area { position: relative; width: 120px; height: 120px; margin-bottom: 15px;}
+        .svg-character { width: 100%; height: 100%; }
+        #barbell { transition: transform 0.1s ease-out; }
         
-        .meal-time { font-size: 12px; color: #00d2ff; font-weight: 700; text-transform: uppercase; }
-        .meal-desc { font-size: 14px; color: var(--text-main); margin-top: 4px; }
+        .game-ui { display: flex; align-items: center; gap: 20px; width: 100%; max-width: 300px;}
+        .pump-btn {
+            background: var(--neon-purple); color: #fff; border: none; padding: 15px 30px; border-radius: 10px;
+            font-weight: 900; font-size: 1.2rem; cursor: pointer; text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(176, 38, 255, 0.4); transition: transform 0.05s;
+        }
+        .pump-btn:active { transform: scale(0.95); }
+        .rep-counter { font-size: 2rem; font-weight: 900; color: var(--text-primary); line-height: 1;}
+        .rep-counter span { color: var(--neon-green); font-size: 1rem; text-transform: uppercase;}
+
+        .game-progress-bg { width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; margin-top: 15px; overflow: hidden;}
+        .game-progress-fill { height: 100%; background: var(--neon-green); width: 0%; transition: width 0.1s linear;}
+
+        /* BENTO GRID */
+        .bento-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .bento-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between;}
+        
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .card-label { font-size: 0.8rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase; }
+        .card-value { font-size: 2.2rem; font-weight: 900; color: var(--text-primary); line-height: 1; }
+        .card-subtext { font-size: 0.8rem; color: var(--text-secondary); margin-top: 8px; font-weight: 500; }
+        .badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; width: fit-content; text-transform: uppercase;}
+
+        .bmi-track { width: 100%; height: 6px; background: var(--border-color); border-radius: 10px; margin-top: 15px; overflow: hidden;}
+        .bmi-fill { height: 100%; border-radius: 10px; transition: width 1s ease, background 0.5s ease; width: 0%;}
+
+        /* CALORIE ENGINE WITH GRAPH */
+        .calorie-section-wrapper { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; }
+        .calorie-strategy { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px;}
+        .cal-box { background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px 10px; text-align: center; transition: var(--transition); }
+        .cal-box .phase { font-size: 0.7rem; font-weight: 800; color: var(--text-secondary); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+        .cal-box .cal { font-size: 1.4rem; font-weight: 900; }
+        
+        /* Bar Graph Styling */
+        .chart-container { display: flex; height: 120px; align-items: flex-end; justify-content: space-around; padding-top: 20px; border-top: 1px dashed var(--border-color); }
+        .bar-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; width: 25%; height: 100%; gap: 8px;}
+        .bar { width: 100%; border-radius: 6px 6px 0 0; transition: height 1s cubic-bezier(0.16, 1, 0.3, 1); height: 0%; }
+        .bar-label { font-size: 0.7rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; }
+        
+        .loss-color { color: var(--neon-red); } .bar-cut { background: var(--neon-red); box-shadow: 0 0 10px rgba(255,0,60,0.5); }
+        .maint-color { color: var(--neon-green); } .bar-maint { background: var(--neon-green); box-shadow: 0 0 10px rgba(57,255,20,0.5); }
+        .bulk-color { color: var(--neon-purple); } .bar-bulk { background: var(--neon-purple); box-shadow: 0 0 10px rgba(176,38,255,0.5); }
+
+        /* WORKOUT PLAN */
+        .workout-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; }
+        .protocol-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);}
+        .workout-grid { display: flex; flex-direction: column; gap: 12px; }
+        
+        .day-card { background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; }
+        .day-header { background: rgba(255, 255, 255, 0.02); padding: 14px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .day-title { font-weight: 800; font-size: 0.95rem; color: var(--text-primary); text-transform: uppercase;}
+        .day-badge { font-size: 0.7rem; padding: 4px 10px; border-radius: 6px; background: #2d3342; color: var(--text-secondary); font-weight: 800; letter-spacing: 0.5px;}
+
+        .exercise-list { padding: 15px 20px; display: flex; flex-direction: column; gap: 12px; }
+        .exercise-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; border-bottom: 1px dashed #2d3342; padding-bottom: 8px;}
+        .exercise-item:last-child { border-bottom: none; padding-bottom: 0;}
+        .exercise-name { color: #e2e8f0; font-weight: 600; }
+        .exercise-reps { font-family: monospace; background: rgba(0,243,255,0.1); padding: 4px 8px; border-radius: 6px; font-size: 0.85rem; color: var(--neon-blue); font-weight: 700;}
+
+        .day-rest .exercise-list { color: var(--neon-green); font-weight: 600;}
+        .day-rest .day-badge { background: rgba(57, 255, 20, 0.15); color: var(--neon-green); }
+
     </style>
 </head>
 <body>
 
-    <div class="dashboard-card">
-        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️ Light Mode</button>
-        <h2>⚡ Health Planner Pro</h2>
-        
-        <!-- Unit Toggle -->
-        <div class="toggle-container">
-            <div class="toggle-btn active" id="btnMetric" onclick="setUnit('metric')">Metric</div>
-            <div class="toggle-btn" id="btnImperial" onclick="setUnit('imperial')">Imperial</div>
-        </div>
+    <!-- Floating Doodles for the energetic vibe -->
+    <div class="doodle d1">🏋️‍♂️</div>
+    <div class="doodle d2">⚡</div>
+    <div class="doodle d3">🔥</div>
+    <div class="doodle d4">🦍</div>
+    <div class="doodle d5">💪</div>
 
-        <!-- Demographics & Activity -->
-        <div class="row-group">
-            <div class="input-group">
-                <label>Age (Years)</label>
-                <input type="number" id="age" placeholder="e.g. 30" min="15" max="100">
+    <div class="app-layout">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="header">
+                <div class="logo">AURA<span>.</span></div>
+                <div class="tagline">Game On. Fat Gone.</div>
             </div>
-            <div class="input-group">
-                <label>Gender</label>
-                <select id="gender">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                </select>
+
+            <!-- Unit Toggle -->
+            <div class="unit-toggle">
+                <div class="toggle-btn active" id="btnMetric" onclick="setUnit('metric')">KG / CM</div>
+                <div class="toggle-btn" id="btnImperial" onclick="setUnit('imperial')">LBS / FT</div>
             </div>
-        </div>
 
-        <div class="input-group">
-            <label>Daily Activity Level</label>
-            <select id="activity">
-                <option value="1.2">Sedentary (Little/No exercise)</option>
-                <option value="1.375">Lightly Active (Exercise 1-3 days/week)</option>
-                <option value="1.55">Moderately Active (Exercise 3-5 days/week)</option>
-                <option value="1.725">Very Active (Exercise 6-7 days/week)</option>
-                <option value="1.9">Extra Active (Very hard exercise/physical job)</option>
-            </select>
-        </div>
-
-        <!-- Height Input -->
-        <div id="heightMetricWrapper" class="input-group">
-            <label>Height (Centimeters)</label>
-            <input type="number" id="heightCm" placeholder="e.g. 175" step="0.1" oninput="updateLiveConversions()">
-            <div class="conversion-hint" id="hintHeightCm">≈ 5' 8.9"</div>
-        </div>
-
-        <div id="heightImperialWrapper" class="row-group" style="display:none;">
-            <div class="input-group">
-                <label>Feet</label>
-                <input type="number" id="heightFt" placeholder="5" oninput="updateLiveConversions()">
-            </div>
-            <div class="input-group">
-                <label>Inches</label>
-                <input type="number" id="heightIn" placeholder="8" oninput="updateLiveConversions()">
-            </div>
-        </div>
-        <div class="conversion-hint" id="hintHeightImp" style="display:none; margin-top:-15px; margin-bottom:20px;">≈ 172.7 cm</div>
-
-        <!-- Weight Input -->
-        <div class="input-group">
-            <label id="lblWeight">Weight (Kilograms)</label>
-            <input type="number" id="weight" placeholder="e.g. 70" step="0.1" oninput="updateLiveConversions()">
-            <div class="conversion-hint" id="hintWeight">≈ 154.3 lbs</div>
-        </div>
-
-        <button class="calc-btn" id="calcBtn" onclick="calculatePlan()">Generate Complete Plan</button>
-
-        <!-- Result Section -->
-        <div class="result-area" id="resultBox">
-            
-            <div class="result-header">
-                <div class="bmi-category" id="bmiStatus">Status</div>
-                <div class="bmi-value" id="bmiNumber">0.0</div>
-            </div>
-            
-            <div class="detailed-stats">
-                <div class="stat-box">
-                    <p>Base Metabolism (BMR)</p>
-                    <strong id="bmrText">-- kcal</strong>
+            <div class="form-section">
+                <!-- Inputs -->
+                <div class="input-group">
+                    <label>Weight</label>
+                    <input type="number" id="weight" placeholder="e.g. 75" oninput="updateLiveHint()">
+                    <div class="live-hint" id="hintWeight"></div>
                 </div>
-                <div class="stat-box">
-                    <p>Daily Energy Exp. (TDEE)</p>
-                    <strong id="tdeeText">-- kcal</strong>
+
+                <div class="input-group" id="wrapHeightCm">
+                    <label>Height (cm)</label>
+                    <input type="number" id="heightCm" placeholder="e.g. 175" oninput="updateLiveHint()">
+                    <div class="live-hint" id="hintHeightCm"></div>
+                </div>
+
+                <div class="row" id="wrapHeightImp" style="display: none;">
+                    <div class="input-group"><label>Feet</label><input type="number" id="heightFt" placeholder="5" oninput="updateLiveHint()"></div>
+                    <div class="input-group"><label>Inches</label><input type="number" id="heightIn" placeholder="9" oninput="updateLiveHint()"></div>
+                </div>
+                <div class="live-hint" id="hintHeightImp" style="display: none;"></div>
+
+                <div class="row">
+                    <div class="input-group">
+                        <label>Age</label>
+                        <input type="number" id="age" placeholder="25">
+                    </div>
+                    <div class="input-group">
+                        <label>Gender</label>
+                        <select id="gender">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Daily Activity Level</label>
+                    <select id="activity">
+                        <option value="1.2">Sedentary (No Exercise)</option>
+                        <option value="1.375">Lightly Active (1-3 Days)</option>
+                        <option value="1.55" selected>Moderately Active (3-5 Days)</option>
+                        <option value="1.725">Very Active (6-7 Days)</option>
+                        <option value="1.9">Extra Active (Physical Job + Gym)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Select Your Mission</label>
+                    <select id="goal">
+                        <option value="loss">Mission: Fat Shred (Cut)</option>
+                        <option value="maint">Mission: Maintain Status</option>
+                        <option value="bulk">Mission: Hulk Smash (Bulk)</option>
+                    </select>
                 </div>
                 
-                <div class="stat-box full">
-                    <p>Your Daily Calorie Target (<span id="goalText">--</span>)</p>
-                    <strong id="targetCalText" style="font-size: 22px; color: #00d2ff;">-- kcal</strong>
-                    <div class="macro-row">
-                        <span id="protText">🍖 --g</span>
-                        <span id="carbText">🍚 --g</span>
-                        <span id="fatText">🥑 --g</span>
+                <button class="btn-primary" onclick="analyzeData()">Launch System 🚀</button>
+            </div>
+        </div>
+
+        <!-- MAIN DASHBOARD -->
+        <div class="dashboard" id="resultsPanel">
+            
+            <!-- THE WARMUP MINIGAME -->
+            <div class="game-card">
+                <div class="game-title">Warmup Minigame: The Bench Press</div>
+                <div class="game-desc">How to play: Tap "PUMP!" fast to beat gravity. Reach 100% to count a Rep!</div>
+                
+                <div class="animation-area">
+                    <svg class="svg-character" viewBox="0 0 100 100">
+                        <!-- Bench & Stickman -->
+                        <rect x="20" y="80" width="60" height="10" fill="#2a2f3a" /> <!-- Bench -->
+                        <circle cx="50" cy="70" r="10" fill="#ffffff" /> <!-- Head -->
+                        <path d="M 30 80 Q 50 60 70 80" fill="none" stroke="#ffffff" stroke-width="4"/> <!-- Arms base -->
+                        
+                        <!-- Animated Barbell -->
+                        <g id="barbell" transform="translate(0, 30)">
+                            <line x1="10" y1="50" x2="90" y2="50" stroke="#00f3ff" stroke-width="4"/>
+                            <rect x="10" y="40" width="10" height="20" fill="#39ff14"/>
+                            <rect x="80" y="40" width="10" height="20" fill="#39ff14"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <div class="game-ui">
+                    <button class="pump-btn" onclick="pumpIron()">PUMP!</button>
+                    <div class="rep-counter" id="gameReps">0 <br><span>Reps</span></div>
+                </div>
+                <div class="game-progress-bg"><div class="game-progress-fill" id="gameFill"></div></div>
+            </div>
+
+            <div class="section-title"><span>#1</span> Live Telemetry</div>
+            
+            <div class="bento-grid">
+                <!-- BMI Card -->
+                <div class="bento-card">
+                    <div class="card-header">
+                        <div class="card-label">Body Mass Index</div>
+                        <div class="badge" id="badgeStatus">--</div>
+                    </div>
+                    <div class="card-value" id="valBmi">--</div>
+                    <div class="bmi-track"><div class="bmi-fill" id="bmiFill"></div></div>
+                </div>
+                
+                <!-- Accurate TDEE -->
+                <div class="bento-card">
+                    <div class="card-header">
+                        <div class="card-label">Energy Burn (TDEE)</div>
+                        <div class="badge" style="background: rgba(0, 243, 255, 0.15); color: var(--neon-blue);">Activity Multiplied</div>
+                    </div>
+                    <div class="card-value" id="valTdee">-- <span style="font-size:1.2rem; color:var(--text-secondary);">kcal</span></div>
+                    <div class="card-subtext">Total daily calories burned</div>
+                </div>
+
+                <!-- Ideal Weight -->
+                <div class="bento-card">
+                    <div class="card-header"><div class="card-label">Target Weight Zone 🎯</div></div>
+                    <div class="card-value" style="font-size:1.6rem;" id="valIdeal">--</div>
+                    <div class="card-subtext">Scientifically ideal for your height</div>
+                </div>
+
+                <!-- Hydration -->
+                <div class="bento-card">
+                    <div class="card-header"><div class="card-label">Hydration Protocol 💧</div></div>
+                    <div class="card-value" style="font-size:1.8rem;" id="valWater">-- <span style="font-size:1rem; color:var(--text-secondary);">Liters/Day</span></div>
+                    <div class="card-subtext">Minimum water intake required</div>
+                </div>
+            </div>
+
+            <div class="section-title"><span>#2</span> Caloric Command Center</div>
+            
+            <div class="calorie-section-wrapper">
+                <div class="calorie-strategy">
+                    <div class="cal-box" id="boxLoss">
+                        <div class="phase">Fat Shred (Cut)</div>
+                        <div class="cal loss-color" id="calCut">--</div>
+                    </div>
+                    <div class="cal-box" id="boxMaint">
+                        <div class="phase">Maintain Status</div>
+                        <div class="cal maint-color" id="calMaint">--</div>
+                    </div>
+                    <div class="cal-box" id="boxBulk">
+                        <div class="phase">Hulk Smash (Bulk)</div>
+                        <div class="cal bulk-color" id="calBulk">--</div>
+                    </div>
+                </div>
+
+                <!-- NEW CALORIE GRAPH -->
+                <div class="chart-container">
+                    <div class="bar-wrapper">
+                        <div class="bar bar-cut" id="barCut"></div>
+                        <div class="bar-label">Cut</div>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar bar-maint" id="barMaint"></div>
+                        <div class="bar-label">Maint</div>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar bar-bulk" id="barBulk"></div>
+                        <div class="bar-label">Bulk</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Dynamic Diet Section -->
-            <div class="diet-section">
-                <h3>🍽️ Sample Meal Plan</h3>
-                <div id="dietPlanContent">
-                    <!-- Populated by JS -->
+            <!-- WORKOUT PLAN (6-DAY SPLIT) -->
+            <div class="section-title"><span>#3</span> Combat Protocol (6-Day Split)</div>
+            <div class="workout-box">
+                <div class="protocol-header">
+                    <h3 id="planTitle" style="font-size: 1.2rem; font-weight: 900; color:var(--text-primary); text-transform: uppercase;">Generating...</h3>
+                    <div class="badge" id="protocolBadge" style="margin:0; font-size:0.9rem; padding: 8px 15px;">--</div>
+                </div>
+                <div class="workout-grid" id="workoutGrid">
+                    <!-- Javascript Injects 6-Day Split Here -->
                 </div>
             </div>
 
@@ -390,196 +390,252 @@
     </div>
 
     <script>
-        let currentUnit = 'metric';
+        // --- GAME LOGIC ---
+        let liftProgress = 0;
+        let reps = 0;
+        let gameActive = false;
+        let gameInterval;
 
-        // Theme Toggle Logic
-        function toggleTheme() {
-            const html = document.documentElement;
-            const btn = document.getElementById('themeBtn');
-            if (html.getAttribute('data-theme') === 'dark') {
-                html.setAttribute('data-theme', 'light');
-                btn.innerText = "🌙 Dark Mode";
-            } else {
-                html.setAttribute('data-theme', 'dark');
-                btn.innerText = "☀️ Light Mode";
+        function pumpIron() {
+            if(!gameActive) {
+                gameActive = true;
+                startGameLoop();
             }
+            liftProgress += 20; // Tap power
+            if(liftProgress >= 100) {
+                reps++;
+                document.getElementById('gameReps').innerHTML = reps + "<br><span>Reps</span>";
+                liftProgress = 0;
+                // Add a cool flash effect
+                document.getElementById('barbell').style.stroke = "#39ff14";
+                setTimeout(()=> document.getElementById('barbell').style.stroke = "#00f3ff", 200);
+            }
+            updateGameUI();
         }
 
-        // Unit Toggle Logic
+        function startGameLoop() {
+            gameInterval = setInterval(() => {
+                if(liftProgress > 0) {
+                    liftProgress -= 3; // Gravity / Fatigue drain
+                    updateGameUI();
+                }
+            }, 50);
+        }
+
+        function updateGameUI() {
+            if(liftProgress < 0) liftProgress = 0;
+            if(liftProgress > 100) liftProgress = 100;
+            
+            // Visual progress bar
+            document.getElementById('gameFill').style.width = liftProgress + "%";
+            
+            // Animate SVG Barbell (Y goes from 30 down to 0)
+            let yPos = 30 - (liftProgress * 0.3);
+            document.getElementById('barbell').setAttribute('transform', `translate(0, ${yPos})`);
+        }
+
+
+        // --- DASHBOARD LOGIC ---
+        let currentUnit = 'metric';
+
         function setUnit(unit) {
             currentUnit = unit;
-            document.getElementById('resultBox').style.display = 'none';
+            document.getElementById('resultsPanel').style.display = 'none';
             document.getElementById('weight').value = '';
-            document.getElementById('heightCm').value = '';
-            document.getElementById('heightFt').value = '';
-            document.getElementById('heightIn').value = '';
-            document.getElementById('hintWeight').innerText = "Enter weight to convert";
-
+            document.getElementById('hintWeight').innerText = '';
+            
             if (unit === 'metric') {
                 document.getElementById('btnMetric').classList.add('active');
                 document.getElementById('btnImperial').classList.remove('active');
-                document.getElementById('heightMetricWrapper').style.display = 'block';
-                document.getElementById('heightImperialWrapper').style.display = 'none';
+                document.getElementById('weight').placeholder = "Weight in KG";
+                document.getElementById('wrapHeightCm').style.display = 'flex';
+                document.getElementById('wrapHeightImp').style.display = 'none';
                 document.getElementById('hintHeightImp').style.display = 'none';
-                document.getElementById('hintHeightCm').style.display = 'block';
-                document.getElementById('lblWeight').innerText = "Weight (Kilograms)";
-                document.getElementById('weight').placeholder = "e.g. 70";
             } else {
                 document.getElementById('btnImperial').classList.add('active');
                 document.getElementById('btnMetric').classList.remove('active');
-                document.getElementById('heightMetricWrapper').style.display = 'none';
-                document.getElementById('heightImperialWrapper').style.display = 'flex';
+                document.getElementById('weight').placeholder = "Weight in LBS";
+                document.getElementById('wrapHeightCm').style.display = 'none';
+                document.getElementById('wrapHeightImp').style.display = 'flex';
                 document.getElementById('hintHeightImp').style.display = 'block';
-                document.getElementById('hintHeightCm').style.display = 'none';
-                document.getElementById('lblWeight').innerText = "Weight (Pounds)";
-                document.getElementById('weight').placeholder = "e.g. 150";
             }
         }
 
-        // Live Converter
-        function updateLiveConversions() {
-            let weightInput = parseFloat(document.getElementById('weight').value);
-            if (!isNaN(weightInput) && weightInput > 0) {
-                if (currentUnit === 'metric') {
-                    document.getElementById('hintWeight').innerText = `≈ ${(weightInput * 2.20462).toFixed(1)} lbs`;
-                } else {
-                    document.getElementById('hintWeight').innerText = `≈ ${(weightInput / 2.20462).toFixed(1)} kg`;
-                }
-            } else { document.getElementById('hintWeight').innerText = ""; }
+        function updateLiveHint() {
+            let w = parseFloat(document.getElementById('weight').value);
+            if(w > 0) {
+                document.getElementById('hintWeight').innerText = currentUnit === 'metric' ? `Matlab: ${(w * 2.20462).toFixed(1)} lbs` : `Matlab: ${(w / 2.20462).toFixed(1)} Kgs`;
+            } else { document.getElementById('hintWeight').innerText = ''; }
 
-            if (currentUnit === 'metric') {
-                let cmInput = parseFloat(document.getElementById('heightCm').value);
-                if (!isNaN(cmInput) && cmInput > 0) {
-                    let totalIn = cmInput / 2.54;
-                    document.getElementById('hintHeightCm').innerText = `≈ ${Math.floor(totalIn / 12)}' ${(totalIn % 12).toFixed(1)}"`;
-                } else { document.getElementById('hintHeightCm').innerText = ""; }
+            if(currentUnit === 'metric') {
+                let h = parseFloat(document.getElementById('heightCm').value);
+                if(h > 0) {
+                    let tInches = h / 2.54;
+                    document.getElementById('hintHeightCm').innerText = `Matlab: ${Math.floor(tInches/12)} Foot ${Math.round(tInches%12)} Inch`;
+                } else { document.getElementById('hintHeightCm').innerText = ''; }
             } else {
-                let ftInput = parseFloat(document.getElementById('heightFt').value) || 0;
-                let inInput = parseFloat(document.getElementById('heightIn').value) || 0;
-                if (ftInput > 0 || inInput > 0) {
-                    document.getElementById('hintHeightImp').innerText = `≈ ${(((ftInput * 12) + inInput) * 2.54).toFixed(1)} cm`;
-                } else { document.getElementById('hintHeightImp').innerText = ""; }
+                let f = parseFloat(document.getElementById('heightFt').value) || 0;
+                let i = parseFloat(document.getElementById('heightIn').value) || 0;
+                if(f > 0 || i > 0) {
+                    document.getElementById('hintHeightImp').innerText = `Matlab: ${(((f * 12) + i) * 2.54).toFixed(1)} cm`;
+                } else { document.getElementById('hintHeightImp').innerText = ''; }
             }
         }
 
-        // Main Calculation Function
-        function calculatePlan() {
-            let weight = parseFloat(document.getElementById('weight').value);
+        const baseWorkoutPlan = [
+            { day: "Monday", type: "Chest & Triceps", exercises: [ 
+                { name: "Incline Bench Press", reps: "3 Sets x 8-12 Reps" }, 
+                { name: "Flat Bench Press", reps: "3 Sets x 8-12 Reps" }, 
+                { name: "Incline Dumbbell Press", reps: "3 Sets x 8-12 Reps" },
+                { name: "Pec Dec Fly", reps: "3 Sets x 8-12 Reps" },
+                { name: "Tricep Pushdowns (Cable)", reps: "3 Sets x 12-15 Reps" },
+                { name: "Overhead Tricep Extension", reps: "3 Sets x 10-15 Reps" }
+            ]},
+            { day: "Tuesday", type: "Back & Biceps", exercises: [ 
+                { name: "Lat Pulldowns", reps: "3 Sets x 8-12 Reps" }, 
+                { name: "Seated Cable Rows", reps: "3 Sets x 8-12 Reps" }, 
+                { name: "Face Pulls", reps: "3 Sets x 15 Reps" }, 
+                { name: "Barbell Bicep Curls", reps: "3 Sets x 10-12 Reps" },
+                { name: "Hammer Curls", reps: "3 Sets x 10-12 Reps" }
+            ]},
+            { day: "Wednesday", type: "Legs & Shoulders", exercises: [ 
+                { name: "Barbell Squats", reps: "3 Sets x 8-10 Reps" }, 
+                { name: "Leg Press", reps: "3 Sets x 10-12 Reps" }, 
+                { name: "Overhead Dumbbell Press", reps: "3 Sets x 8-12 Reps" },
+                { name: "Lateral Raises", reps: "4 Sets x 15 Reps" },
+                { name: "Calf Raises", reps: "3 Sets x 15-20 Reps" }
+            ]},
+            { day: "Thursday", type: "Chest & Triceps (Repeat)", exercises: [ 
+                { name: "Incline Bench Press", reps: "3 Sets x 8-12 Reps" }, 
+                { name: "Flat Bench Press", reps: "3 Sets x 8-12 Reps" }, 
+                { name: "Incline Dumbbell Press", reps: "3 Sets x 8-12 Reps" },
+                { name: "Pec Dec Fly", reps: "3 Sets x 8-12 Reps" },
+                { name: "Skull Crushers", reps: "3 Sets x 10-12 Reps" },
+                { name: "Cable Kickbacks", reps: "3 Sets x 12-15 Reps" }
+            ]},
+            { day: "Friday", type: "Back & Biceps (Repeat)", exercises: [ 
+                { name: "Pull-ups / Assisted", reps: "3 Sets x 8-12 Reps" }, 
+                { name: "T-Bar Rows / Dumbbell Row", reps: "3 Sets x 8-12 Reps" }, 
+                { name: "Dumbbell Shrugs", reps: "3 Sets x 12-15 Reps" }, 
+                { name: "Preacher Curls", reps: "3 Sets x 10-12 Reps" },
+                { name: "Dumbbell Curls", reps: "3 Sets x 10-12 Reps" }
+            ]},
+            { day: "Saturday", type: "Legs & Shoulders (Repeat)", exercises: [ 
+                { name: "Leg Extensions", reps: "3 Sets x 12-15 Reps" }, 
+                { name: "Hamstring Curls", reps: "3 Sets x 12-15 Reps" }, 
+                { name: "Walking Lunges", reps: "3 Sets x 12 Steps" },
+                { name: "Arnold Press", reps: "3 Sets x 8-12 Reps" },
+                { name: "Lateral Raises", reps: "4 Sets x 15 Reps" }
+            ]},
+            { day: "Sunday", type: "Rest & Recover 😴", isRest: true, desc: "Aaram kar bhai. Muscles gym me nahi, rest me bante hain. Eat clean!" }
+        ];
+
+        function analyzeData() {
+            let wInput = parseFloat(document.getElementById('weight').value);
             let age = parseInt(document.getElementById('age').value);
             let gender = document.getElementById('gender').value;
             let activity = parseFloat(document.getElementById('activity').value);
+            let goal = document.getElementById('goal').value;
 
-            if (isNaN(weight) || isNaN(age) || weight <= 0 || age <= 0) {
-                const btn = document.getElementById('calcBtn');
-                btn.classList.add('error-shake');
-                btn.innerText = "Please fill all fields!";
-                setTimeout(() => { btn.classList.remove('error-shake'); btn.innerText = "Generate Complete Plan"; }, 1000);
-                return;
-            }
+            if(!wInput || !age) { alert("Details dalo captain, bina data ke engine start nahi hoga!"); return; }
 
-            let heightCm = currentUnit === 'metric' ? parseFloat(document.getElementById('heightCm').value) : 
-                           (((parseFloat(document.getElementById('heightFt').value) || 0) * 12) + (parseFloat(document.getElementById('heightIn').value) || 0)) * 2.54;
+            let wKg = currentUnit === 'metric' ? wInput : wInput / 2.20462;
+            let hCm = currentUnit === 'metric' ? parseFloat(document.getElementById('heightCm').value) : (((parseFloat(document.getElementById('heightFt').value) || 0) * 12) + (parseFloat(document.getElementById('heightIn').value) || 0)) * 2.54;
+
+            if(!hCm || hCm <= 0) { alert("Height dalo theek se!"); return; }
+
+            // CORE MATH
+            const hMeters = hCm / 100;
+            const bmi = (wKg / (hMeters * hMeters)).toFixed(1);
+            let bmr = (10 * wKg) + (6.25 * hCm) - (5 * age);
+            bmr = gender === 'male' ? bmr + 5 : bmr - 161;
             
-            let weightKg = currentUnit === 'metric' ? weight : weight / 2.20462;
-            let heightMeters = heightCm / 100;
+            const tdee = Math.round(bmr * activity);
 
-            if (isNaN(heightCm) || heightCm <= 0) return;
+            document.getElementById('valBmi').innerText = bmi;
+            document.getElementById('valTdee').innerText = tdee;
 
-            // BMI Calculation
-            let bmi = (weightKg / (heightMeters * heightMeters)).toFixed(1);
-
-            // BMR Calculation (Mifflin-St Jeor)
-            let bmr = gender === 'male' ? (10 * weightKg) + (6.25 * heightCm) - (5 * age) + 5 
-                                        : (10 * weightKg) + (6.25 * heightCm) - (5 * age) - 161;
+            // BMI Logic
+            const badge = document.getElementById('badgeStatus');
+            const fill = document.getElementById('bmiFill');
             
-            // TDEE Calculation
-            let tdee = bmr * activity;
+            let widthPct = ((bmi - 15) / 25) * 100;
+            if(widthPct < 0) widthPct = 0; if(widthPct > 100) widthPct = 100;
+            setTimeout(() => { fill.style.width = widthPct + "%"; }, 100);
 
-            // Determine Target Calories & Goal based on BMI
-            let targetCals = tdee;
-            let category = "";
-            let color = "";
-            let goalStr = "";
-            let dietType = "";
-
-            if (bmi < 18.5) {
-                category = "Underweight"; color = "#3498db"; goalStr = "Weight Gain";
-                targetCals = tdee + 500; // Surplus
-                dietType = "bulk";
-            } else if (bmi >= 18.5 && bmi <= 24.9) {
-                category = "Normal Weight"; color = "#2ecc71"; goalStr = "Maintenance";
-                targetCals = tdee; // Maintenance
-                dietType = "maintain";
-            } else if (bmi >= 25 && bmi <= 29.9) {
-                category = "Overweight"; color = "#f1c40f"; goalStr = "Weight Loss";
-                targetCals = tdee - 500; // Deficit
-                dietType = "cut";
+            if(bmi < 18.5) {
+                badge.innerText = "UNDERWEIGHT ZONE"; badge.style.background = "var(--neon-blue)"; badge.style.color = "#000"; fill.style.background = "var(--neon-blue)";
+            } else if(bmi <= 24.9) {
+                badge.innerText = "OPTIMAL ZONE 🔥"; badge.style.background = "var(--neon-green)"; badge.style.color = "#000"; fill.style.background = "var(--neon-green)";
+            } else if(bmi <= 29.9) {
+                badge.innerText = "OVERWEIGHT ZONE 🍔"; badge.style.background = "var(--neon-orange)"; badge.style.color = "#000"; fill.style.background = "var(--neon-orange)";
             } else {
-                category = "Obese"; color = "#e74c3c"; goalStr = "Aggressive Loss";
-                targetCals = tdee - 750; // Larger Deficit
-                dietType = "cut";
+                badge.innerText = "DANGER ZONE 🚨"; badge.style.background = "var(--neon-red)"; badge.style.color = "#fff"; fill.style.background = "var(--neon-red)";
             }
 
-            // Macros (Protein: 30%, Carbs: 40%, Fats: 30%)
-            let proteinGrams = Math.round((targetCals * 0.30) / 4);
-            let carbsGrams = Math.round((targetCals * 0.40) / 4);
-            let fatsGrams = Math.round((targetCals * 0.30) / 9);
-
-            // Update UI
-            document.getElementById('bmiNumber').innerText = bmi;
-            document.getElementById('bmiNumber').style.color = color;
-            document.getElementById('bmiStatus').innerText = category;
-            document.getElementById('bmiStatus').style.color = color;
+            // Ideal Weight & Water
+            let minW = 18.5 * (hMeters * hMeters);
+            let maxW = 24.9 * (hMeters * hMeters);
+            if(currentUnit === 'imperial') { minW *= 2.20462; maxW *= 2.20462; }
+            document.getElementById('valIdeal').innerText = `${minW.toFixed(0)} - ${maxW.toFixed(0)} ${currentUnit==='metric'?'kg':'lbs'}`;
             
-            document.getElementById('bmrText').innerText = Math.round(bmr) + " kcal";
-            document.getElementById('tdeeText').innerText = Math.round(tdee) + " kcal";
-            document.getElementById('targetCalText').innerText = Math.round(targetCals) + " kcal";
-            document.getElementById('goalText').innerText = goalStr;
+            let water = wKg * 0.035; 
+            document.getElementById('valWater').innerText = water.toFixed(1);
 
-            document.getElementById('protText').innerText = `🍖 ${proteinGrams}g Pro`;
-            document.getElementById('carbText').innerText = `🍚 ${carbsGrams}g Carb`;
-            document.getElementById('fatText').innerText = `🥑 ${fatsGrams}g Fat`;
+            // Calories
+            let cCut = tdee - 500;
+            let cMaint = tdee;
+            let cBulk = tdee + 300;
+            document.getElementById('calCut').innerText = cCut;
+            document.getElementById('calMaint').innerText = cMaint;
+            document.getElementById('calBulk').innerText = cBulk;
 
-            generateDietPlan(dietType, Math.round(targetCals));
+            document.getElementById('boxLoss').style.borderColor = goal === 'loss' ? 'var(--neon-red)' : 'var(--border-color)';
+            document.getElementById('boxMaint').style.borderColor = goal === 'maint' ? 'var(--neon-green)' : 'var(--border-color)';
+            document.getElementById('boxBulk').style.borderColor = goal === 'bulk' ? 'var(--neon-purple)' : 'var(--border-color)';
 
-            document.getElementById('resultBox').style.display = "block";
-            document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+            // UPDATE GRAPH HEIGHTS
+            let maxCal = cBulk;
+            setTimeout(() => {
+                document.getElementById('barCut').style.height = (cCut / maxCal) * 90 + "%";
+                document.getElementById('barMaint').style.height = (cMaint / maxCal) * 95 + "%";
+                document.getElementById('barBulk').style.height = "100%";
+            }, 300);
 
-        // Generate Sample Diet Plan based on Goal
-        function generateDietPlan(type, calories) {
-            let meals = {};
-
-            if (type === "cut") {
-                meals = {
-                    breakfast: "Scrambled egg whites with spinach, tomatoes, and 1 slice of whole-grain toast. Black coffee or green tea.",
-                    lunch: "Large mixed green salad with grilled chicken breast, cucumber, cherry tomatoes, and a light vinaigrette.",
-                    snack: "Greek yogurt (non-fat) with a handful of berries or a protein shake mixed with water.",
-                    dinner: "Baked white fish or tofu, a large portion of steamed broccoli, and a small serving of quinoa."
-                };
-            } else if (type === "bulk") {
-                meals = {
-                    breakfast: "Oatmeal cooked with whole milk, topped with peanut butter, banana slices, chia seeds, and 2 whole eggs on the side.",
-                    lunch: "Whole wheat wrap with grilled chicken/steak, avocado, cheese, and a side of mixed nuts.",
-                    snack: "High-calorie protein shake (protein powder, milk, banana, oats, and peanut butter).",
-                    dinner: "Salmon or beef steak, large portion of sweet potato or brown rice, roasted olive-oil veggies."
-                };
+            // Workout Update
+            let planTitle, badgeColor, badgeText;
+            if(goal === 'loss') {
+                planTitle = "Fat Shredder 6-Day Protocol 🔥"; badgeColor = "var(--neon-red)"; badgeText = "MISSION: CUT";
+            } else if(goal === 'bulk') {
+                planTitle = "Hulk Mass Building Protocol 🦍"; badgeColor = "var(--neon-purple)"; badgeText = "MISSION: BULK";
             } else {
-                meals = {
-                    breakfast: "2 whole eggs scrambled, 1 slice whole-wheat toast, and a piece of fruit (apple or orange).",
-                    lunch: "Grilled chicken or chickpeas with quinoa, mixed vegetables, and a drizzle of olive oil.",
-                    snack: "A handful of almonds and a low-sugar greek yogurt.",
-                    dinner: "Baked salmon or grilled tofu, a side of brown rice, and steamed asparagus."
-                };
+                planTitle = "Aesthetic Recomp Protocol ⚡"; badgeColor = "var(--neon-green)"; badgeText = "MISSION: MAINTAIN";
             }
+            
+            document.getElementById('planTitle').innerText = planTitle;
+            const pBadge = document.getElementById('protocolBadge');
+            pBadge.innerText = badgeText; pBadge.style.background = badgeColor; pBadge.style.color = "#000";
 
-            const dietHTML = `
-                <div class="meal-item"><div class="meal-time">Breakfast (~${Math.round(calories*0.25)} kcal)</div><div class="meal-desc">${meals.breakfast}</div></div>
-                <div class="meal-item"><div class="meal-time">Lunch (~${Math.round(calories*0.30)} kcal)</div><div class="meal-desc">${meals.lunch}</div></div>
-                <div class="meal-item"><div class="meal-time">Snack (~${Math.round(calories*0.15)} kcal)</div><div class="meal-desc">${meals.snack}</div></div>
-                <div class="meal-item"><div class="meal-time">Dinner (~${Math.round(calories*0.30)} kcal)</div><div class="meal-desc">${meals.dinner}</div></div>
-            `;
-            document.getElementById('dietPlanContent').innerHTML = dietHTML;
+            const grid = document.getElementById('workoutGrid');
+            grid.innerHTML = "";
+            baseWorkoutPlan.forEach(day => {
+                let html = `<div class="day-card ${day.isRest ? 'day-rest' : ''}">
+                    <div class="day-header">
+                        <div class="day-title">${day.day} // <span style="color:var(--text-secondary); font-weight:600;">${day.type}</span></div>
+                        <div class="day-badge">${day.isRest ? 'RECOVERY' : 'COMBAT READY'}</div>
+                    </div>`;
+                if(day.isRest) { html += `<div class="exercise-list">${day.desc}</div>`; }
+                else {
+                    html += `<div class="exercise-list">`;
+                    day.exercises.forEach(ex => { html += `<div class="exercise-item"><span class="exercise-name">${ex.name}</span><span class="exercise-reps">${ex.reps}</span></div>`; });
+                    html += `</div>`;
+                }
+                grid.innerHTML += html + `</div>`;
+            });
+
+            const panel = document.getElementById('resultsPanel');
+            panel.style.display = 'flex';
+            if(window.innerWidth < 950) { panel.scrollIntoView({ behavior: 'smooth' }); }
         }
     </script>
 </body>
