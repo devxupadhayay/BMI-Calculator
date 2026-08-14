@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Smart BMI Dashboard</title>
+    <title>Advanced Smart BMI Dashboard Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         /* Modern CSS Reset and Base Styles */
@@ -39,11 +39,11 @@
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px;
+            padding: 35px;
             border-radius: 24px;
             box-shadow: 0 25px 45px rgba(0,0,0,0.5);
             width: 100%;
-            max-width: 480px;
+            max-width: 500px;
             transition: all 0.3s ease;
         }
 
@@ -61,7 +61,7 @@
             display: flex;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -82,8 +82,20 @@
             color: white;
         }
 
-        .input-group {
+        .row-group {
+            display: flex;
+            gap: 15px;
             margin-bottom: 20px;
+        }
+
+        .input-group {
+            flex: 1;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .row-group .input-group {
+            margin-bottom: 0;
         }
 
         label {
@@ -96,22 +108,38 @@
             letter-spacing: 0.5px;
         }
 
-        input {
+        input, select {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: rgba(0, 0, 0, 0.2);
             border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             transition: all 0.3s;
+            appearance: none;
         }
 
-        input:focus {
+        select option {
+            background: #203a43;
+            color: white;
+        }
+
+        input:focus, select:focus {
             outline: none;
             border-color: #00d2ff;
             background: rgba(0, 0, 0, 0.4);
             box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+        }
+
+        /* Live Converter Hint */
+        .conversion-hint {
+            font-size: 12px;
+            color: #00d2ff;
+            margin-top: 6px;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
         }
 
         button.calc-btn {
@@ -125,17 +153,13 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            margin-top: 10px;
+            margin-top: 5px;
             box-shadow: 0 8px 20px rgba(58, 123, 213, 0.4);
         }
 
         button.calc-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 25px rgba(58, 123, 213, 0.6);
-        }
-
-        button.calc-btn:active {
-            transform: translateY(0);
         }
 
         /* Error Shake Animation */
@@ -152,7 +176,7 @@
 
         /* Result Area */
         .result-area {
-            margin-top: 35px;
+            margin-top: 30px;
             text-align: center;
             display: none;
             animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -177,16 +201,15 @@
         .bmi-category {
             font-size: 1.4rem;
             font-weight: 600;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             letter-spacing: 1px;
         }
 
-        /* Advanced Dynamic Gauge */
+        /* Gauge */
         .gauge-container {
             position: relative;
             margin-bottom: 25px;
         }
-
         .gauge-track {
             width: 100%;
             height: 14px;
@@ -196,20 +219,17 @@
             position: relative;
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
         }
-
-        /* Gradient background indicating zones */
         .gauge-zones {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(to right, 
-                #3498db 0%, #3498db 14%, /* Underweight */
-                #2ecc71 14%, #2ecc71 40%, /* Normal */
-                #f1c40f 40%, #f1c40f 60%, /* Overweight */
-                #e74c3c 60%, #e74c3c 100% /* Obese */
+                #3498db 0%, #3498db 14%, 
+                #2ecc71 14%, #2ecc71 40%, 
+                #f1c40f 40%, #f1c40f 60%, 
+                #e74c3c 60%, #e74c3c 100% 
             );
             opacity: 0.3;
         }
-
         .gauge-marker {
             position: absolute;
             top: -4px;
@@ -218,37 +238,53 @@
             background: #ffffff;
             border-radius: 3px;
             box-shadow: 0 0 8px rgba(255,255,255,0.8);
-            left: 0%; /* Changed by JS */
+            left: 0%; 
             transition: left 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             z-index: 2;
         }
 
-        /* Ideal Weight Section */
-        .ideal-weight-box {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 12px;
+        /* Detailed Stats Grid */
+        .detailed-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
             margin-bottom: 15px;
-            border-left: 4px solid #00d2ff;
         }
 
-        .ideal-weight-box p {
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 12px;
+            text-align: left;
+            border-left: 3px solid #00d2ff;
+        }
+
+        .stat-box.full-width {
+            grid-column: span 2;
+        }
+
+        .stat-box p {
             margin: 0;
-            font-size: 13px;
+            font-size: 11px;
             color: #b3b3b3;
+            text-transform: uppercase;
         }
 
-        .ideal-weight-box strong {
+        .stat-box strong {
             display: block;
-            font-size: 16px;
+            font-size: 15px;
             color: #fff;
-            margin-top: 5px;
+            margin-top: 3px;
         }
 
         .tips {
-            font-size: 14px;
+            font-size: 13px;
             color: #d1d1d1;
             line-height: 1.6;
+            margin-top: 15px;
+            background: rgba(0,0,0,0.15);
+            padding: 15px;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -260,20 +296,52 @@
         <!-- Unit Toggle -->
         <div class="toggle-container">
             <div class="toggle-btn active" id="btnMetric" onclick="setUnit('metric')">Metric (kg/cm)</div>
-            <div class="toggle-btn" id="btnImperial" onclick="setUnit('imperial')">Imperial (lbs/in)</div>
+            <div class="toggle-btn" id="btnImperial" onclick="setUnit('imperial')">Imperial (lbs/ft)</div>
         </div>
 
+        <!-- Demographics -->
+        <div class="row-group">
+            <div class="input-group">
+                <label>Age (Years)</label>
+                <input type="number" id="age" placeholder="e.g. 30" min="2" max="120">
+            </div>
+            <div class="input-group">
+                <label>Gender</label>
+                <select id="gender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Height Input -->
+        <div id="heightMetricWrapper" class="input-group">
+            <label>Height (Centimeters)</label>
+            <input type="number" id="heightCm" placeholder="e.g. 175" step="0.1" oninput="updateLiveConversions()">
+            <div class="conversion-hint" id="hintHeightCm">≈ 5' 8.9"</div>
+        </div>
+
+        <div id="heightImperialWrapper" class="row-group" style="display:none;">
+            <div class="input-group">
+                <label>Feet</label>
+                <input type="number" id="heightFt" placeholder="5" oninput="updateLiveConversions()">
+            </div>
+            <div class="input-group">
+                <label>Inches</label>
+                <input type="number" id="heightIn" placeholder="8" oninput="updateLiveConversions()">
+            </div>
+        </div>
+        <!-- Moved hint out of flex row to span full width -->
+        <div class="conversion-hint" id="hintHeightImp" style="display:none; margin-top:-15px; margin-bottom:20px;">≈ 172.7 cm</div>
+
+        <!-- Weight Input -->
         <div class="input-group">
             <label id="lblWeight">Weight (Kilograms)</label>
-            <input type="number" id="weight" placeholder="e.g. 70" step="0.1">
+            <input type="number" id="weight" placeholder="e.g. 70" step="0.1" oninput="updateLiveConversions()">
+            <div class="conversion-hint" id="hintWeight">≈ 154.3 lbs</div>
         </div>
 
-        <div class="input-group">
-            <label id="lblHeight">Height (Centimeters)</label>
-            <input type="number" id="height" placeholder="e.g. 175" step="0.1">
-        </div>
-
-        <button class="calc-btn" id="calcBtn" onclick="calculateBMI()">Analyze Health Status</button>
+        <button class="calc-btn" id="calcBtn" onclick="calculateBMI()">Analyze Health Data</button>
 
         <!-- Advanced Visual Result Section -->
         <div class="result-area" id="resultBox">
@@ -282,21 +350,29 @@
                 <div class="gauge-track">
                     <div class="gauge-zones"></div>
                 </div>
-                <!-- This marker slides to the correct BMI position -->
                 <div class="gauge-marker" id="gaugeMarker"></div>
             </div>
             
             <div class="bmi-value" id="bmiNumber">0.0</div>
             <div class="bmi-category" id="bmiStatus">Status</div>
             
-            <div class="ideal-weight-box">
-                <p>Your Healthy Weight Range:</p>
-                <strong id="idealWeightText">-- kg to -- kg</strong>
+            <!-- Detailed Stats Area -->
+            <div class="detailed-stats">
+                <div class="stat-box full-width">
+                    <p>Healthy Weight Target</p>
+                    <strong id="idealWeightText">-- kg to -- kg</strong>
+                </div>
+                <div class="stat-box">
+                    <p>Base Metabolism (BMR)</p>
+                    <strong id="bmrText">-- kcal/day</strong>
+                </div>
+                <div class="stat-box">
+                    <p>Age Insight</p>
+                    <strong id="ageInsightText">--</strong>
+                </div>
             </div>
 
-            <div class="tips" id="healthTip">
-                <!-- Advice generated by JS -->
-            </div>
+            <div class="tips" id="healthTip"></div>
         </div>
     </div>
 
@@ -305,75 +381,159 @@
 
         function setUnit(unit) {
             currentUnit = unit;
-            document.getElementById('weight').value = '';
-            document.getElementById('height').value = '';
             document.getElementById('resultBox').style.display = 'none';
+            
+            // Clear inputs
+            document.getElementById('weight').value = '';
+            document.getElementById('heightCm').value = '';
+            document.getElementById('heightFt').value = '';
+            document.getElementById('heightIn').value = '';
+            
+            // Reset Hints
+            document.getElementById('hintWeight').innerText = "Enter weight to convert";
+            document.getElementById('hintHeightCm').innerText = "Enter height to convert";
+            document.getElementById('hintHeightImp').innerText = "Enter height to convert";
 
             if (unit === 'metric') {
                 document.getElementById('btnMetric').classList.add('active');
                 document.getElementById('btnImperial').classList.remove('active');
+                
+                document.getElementById('heightMetricWrapper').style.display = 'block';
+                document.getElementById('heightImperialWrapper').style.display = 'none';
+                document.getElementById('hintHeightImp').style.display = 'none';
+                
                 document.getElementById('lblWeight').innerText = "Weight (Kilograms)";
                 document.getElementById('weight').placeholder = "e.g. 70";
-                document.getElementById('lblHeight').innerText = "Height (Centimeters)";
-                document.getElementById('height').placeholder = "e.g. 175";
             } else {
                 document.getElementById('btnImperial').classList.add('active');
                 document.getElementById('btnMetric').classList.remove('active');
+                
+                document.getElementById('heightMetricWrapper').style.display = 'none';
+                document.getElementById('heightImperialWrapper').style.display = 'flex';
+                document.getElementById('hintHeightImp').style.display = 'block';
+                
                 document.getElementById('lblWeight').innerText = "Weight (Pounds)";
                 document.getElementById('weight').placeholder = "e.g. 150";
-                document.getElementById('lblHeight').innerText = "Height (Inches)";
-                document.getElementById('height').placeholder = "e.g. 68 (for 5'8\")";
+            }
+        }
+
+        // Live calculator / Converter feature
+        function updateLiveConversions() {
+            let weightInput = parseFloat(document.getElementById('weight').value);
+            
+            // Weight Conversion
+            if (!isNaN(weightInput) && weightInput > 0) {
+                if (currentUnit === 'metric') {
+                    let lbs = (weightInput * 2.20462).toFixed(1);
+                    document.getElementById('hintWeight').innerText = `≈ ${lbs} lbs`;
+                } else {
+                    let kg = (weightInput / 2.20462).toFixed(1);
+                    document.getElementById('hintWeight').innerText = `≈ ${kg} kg`;
+                }
+            } else {
+                document.getElementById('hintWeight').innerText = "";
+            }
+
+            // Height Conversion
+            if (currentUnit === 'metric') {
+                let cmInput = parseFloat(document.getElementById('heightCm').value);
+                if (!isNaN(cmInput) && cmInput > 0) {
+                    let totalInches = cmInput / 2.54;
+                    let feet = Math.floor(totalInches / 12);
+                    let inches = (totalInches % 12).toFixed(1);
+                    document.getElementById('hintHeightCm').innerText = `≈ ${feet}' ${inches}"`;
+                } else {
+                    document.getElementById('hintHeightCm').innerText = "";
+                }
+            } else {
+                let ftInput = parseFloat(document.getElementById('heightFt').value) || 0;
+                let inInput = parseFloat(document.getElementById('heightIn').value) || 0;
+                if (ftInput > 0 || inInput > 0) {
+                    let totalCm = ((ftInput * 12) + inInput) * 2.54;
+                    document.getElementById('hintHeightImp').innerText = `≈ ${totalCm.toFixed(1)} cm`;
+                } else {
+                    document.getElementById('hintHeightImp').innerText = "";
+                }
             }
         }
 
         function triggerError() {
             const btn = document.getElementById('calcBtn');
             btn.classList.add('error-shake');
-            btn.innerText = "Invalid Input!";
+            btn.innerText = "Please fill all fields!";
             setTimeout(() => {
                 btn.classList.remove('error-shake');
-                btn.innerText = "Analyze Health Status";
+                btn.innerText = "Analyze Health Data";
             }, 1000);
         }
 
         function calculateBMI() {
             let weight = parseFloat(document.getElementById('weight').value);
-            let height = parseFloat(document.getElementById('height').value);
+            let age = parseInt(document.getElementById('age').value);
+            let gender = document.getElementById('gender').value;
+            let heightMeters = 0;
+            let heightCm = 0;
+            let weightKg = 0;
 
-            if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+            // Validation
+            if (isNaN(weight) || isNaN(age) || weight <= 0 || age <= 0) {
                 triggerError();
                 return;
             }
 
-            let bmi = 0;
-            let heightMeters = 0;
-
-            // 1. BMI Calculation based on units
+            // Parse heights based on unit and get standard metric values for complex math
             if (currentUnit === 'metric') {
-                heightMeters = height / 100;
-                bmi = weight / (heightMeters * heightMeters);
+                heightCm = parseFloat(document.getElementById('heightCm').value);
+                if (isNaN(heightCm) || heightCm <= 0) { triggerError(); return; }
+                
+                heightMeters = heightCm / 100;
+                weightKg = weight;
             } else {
-                // Imperial formula: 703 x weight(lbs) / [height(in)]^2
-                bmi = 703 * (weight / (height * height));
-                heightMeters = height * 0.0254; // Convert inches to meters for ideal weight math
+                let feet = parseFloat(document.getElementById('heightFt').value) || 0;
+                let inches = parseFloat(document.getElementById('heightIn').value) || 0;
+                let totalInches = (feet * 12) + inches;
+                
+                if (totalInches <= 0) { triggerError(); return; }
+                
+                heightCm = totalInches * 2.54;
+                heightMeters = heightCm / 100;
+                weightKg = weight / 2.20462; // Convert lbs to kg
             }
 
+            // 1. BMI Calculation
+            let bmi = weightKg / (heightMeters * heightMeters);
             bmi = parseFloat(bmi.toFixed(1));
 
-            // 2. Calculate Ideal Weight (Target BMI 18.5 to 24.9)
+            // 2. Ideal Weight Range Calculation
             let minWeightKg = 18.5 * (heightMeters * heightMeters);
             let maxWeightKg = 24.9 * (heightMeters * heightMeters);
-            
             let idealWeightText = "";
+            
             if (currentUnit === 'metric') {
                 idealWeightText = `${minWeightKg.toFixed(1)} kg - ${maxWeightKg.toFixed(1)} kg`;
             } else {
-                let minWeightLbs = minWeightKg * 2.20462;
-                let maxWeightLbs = maxWeightKg * 2.20462;
-                idealWeightText = `${minWeightLbs.toFixed(1)} lbs - ${maxWeightLbs.toFixed(1)} lbs`;
+                let minLbs = minWeightKg * 2.20462;
+                let maxLbs = maxWeightKg * 2.20462;
+                idealWeightText = `${minLbs.toFixed(1)} lbs - ${maxLbs.toFixed(1)} lbs`;
             }
 
-            // 3. Determine Category, Colors, and Tips
+            // 3. BMR (Basal Metabolic Rate) - Mifflin-St Jeor Equation
+            let bmr = 0;
+            if (gender === 'male') {
+                bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) + 5;
+            } else {
+                bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) - 161;
+            }
+
+            // 4. Age-Specific Insights
+            let ageInsight = "Standard Adult BMI Scale applies.";
+            if (age < 18) {
+                ageInsight = "Teens should use BMI percentiles, not standard adult scales.";
+            } else if (age >= 65) {
+                ageInsight = "For seniors, slightly higher BMI (25-27) may be healthier.";
+            }
+
+            // 5. Categorization and Colors
             let category = "";
             let color = "";
             let tip = "";
@@ -381,32 +541,29 @@
             if (bmi < 18.5) {
                 category = "Underweight 🧊";
                 color = "#3498db";
-                tip = "Focus on nutrient-dense foods like nuts, avocados, and proteins to build healthy mass safely.";
+                tip = `To reach a healthier weight safely, aim to consume slightly more than your BMR (${Math.round(bmr + 300)} - ${Math.round(bmr + 500)} kcal/day). Focus on nutrient-dense foods like nuts, avocados, and proteins.`;
             } else if (bmi >= 18.5 && bmi <= 24.9) {
                 category = "Normal Weight ✅";
                 color = "#2ecc71";
-                tip = "Excellent! You are in the healthy range. Keep up the balanced diet and regular physical activity.";
+                tip = `Excellent! You are in the healthy range. Maintaining a daily intake around your metabolic rate + daily activity expenditure will keep you balanced.`;
             } else if (bmi >= 25 && bmi <= 29.9) {
                 category = "Overweight ⚠️";
                 color = "#f1c40f";
-                tip = "Consider slight caloric deficit and increasing daily cardiovascular activities like walking or cycling.";
+                tip = `Consider a slight caloric deficit. Eating around ${Math.round(bmr)} kcal/day while increasing daily movement (like walking or cycling) can help achieve steady, sustainable results.`;
             } else {
                 category = "Obese 🚨";
                 color = "#e74c3c";
-                tip = "Prioritize your health by consulting a healthcare provider or nutritionist for a personalized wellness plan.";
+                tip = `Prioritize your long-term health. Knowing your BMR is a great first step. Consider consulting a healthcare provider to craft a nutrition plan tailored specifically to your needs.`;
             }
 
-            // 4. Calculate Gauge Marker Position
-            // Assuming the visible scale on the gauge represents BMI 15 to 40
+            // Calculate Gauge Marker Position
             let minScale = 15;
             let maxScale = 40;
             let percentage = ((bmi - minScale) / (maxScale - minScale)) * 100;
-            
-            // Clamp the percentage between 0% and 100% so the marker doesn't fly off the screen
             if (percentage < 0) percentage = 0;
             if (percentage > 100) percentage = 100;
 
-            // 5. Update UI Elements
+            // 6. Update UI
             document.getElementById('bmiNumber').innerText = bmi;
             document.getElementById('bmiNumber').style.color = color;
             
@@ -415,17 +572,17 @@
             statusElement.style.color = color;
             
             document.getElementById('idealWeightText').innerText = idealWeightText;
+            document.getElementById('bmrText').innerText = `${Math.round(bmr)} kcal/day`;
+            document.getElementById('ageInsightText').innerText = ageInsight;
             document.getElementById('healthTip').innerText = tip;
 
-            // Update marker position
+            // Gauge Styling
             document.getElementById('gaugeMarker').style.left = percentage + "%";
             document.getElementById('gaugeMarker').style.backgroundColor = color;
             document.getElementById('gaugeMarker').style.boxShadow = `0 0 10px ${color}`;
 
-            // Show result area smoothly
+            // Show result
             document.getElementById('resultBox').style.display = "block";
-            
-            // Smooth scroll to result if on mobile
             document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     </script>
