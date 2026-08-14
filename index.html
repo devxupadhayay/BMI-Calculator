@@ -1,25 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Smart BMI Dashboard Pro</title>
+    <title>Advanced Smart BMI & Diet Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Modern CSS Reset and Base Styles */
+        /* CSS Variables for Theming */
+        :root {
+            /* Dark Theme (Default) */
+            --bg-1: #0f2027; --bg-2: #203a43; --bg-3: #2c5364; --bg-4: #121212;
+            --card-bg: rgba(30, 30, 36, 0.75);
+            --text-main: #ffffff;
+            --text-muted: #b3b3b3;
+            --input-bg: rgba(0, 0, 0, 0.2);
+            --input-border: rgba(255, 255, 255, 0.1);
+            --box-shadow: rgba(0, 0, 0, 0.5);
+            --stat-bg: rgba(255, 255, 255, 0.05);
+            --diet-bg: rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="light"] {
+            /* Light Theme */
+            --bg-1: #fdfbfb; --bg-2: #ebedee; --bg-3: #e2ebf0; --bg-4: #cfd9df;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-main: #1a1a1a;
+            --text-muted: #555555;
+            --input-bg: rgba(0, 0, 0, 0.05);
+            --input-border: rgba(0, 0, 0, 0.1);
+            --box-shadow: rgba(0, 0, 0, 0.1);
+            --stat-bg: rgba(0, 0, 0, 0.03);
+            --diet-bg: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Base Styles */
         * {
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
         
         body {
-            /* Animated Gradient Background */
-            background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #121212);
+            background: linear-gradient(-45deg, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-4));
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            color: #ffffff;
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,37 +60,57 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassmorphism Card */
         .dashboard-card {
-            background: rgba(30, 30, 36, 0.65);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--input-border);
             padding: 35px;
             border-radius: 24px;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 45px var(--box-shadow);
             width: 100%;
-            max-width: 500px;
-            transition: all 0.3s ease;
+            max-width: 550px;
+            position: relative;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(0, 210, 255, 0.2);
+            border-color: #00d2ff;
         }
 
         h2 {
-            text-align: center;
+            text-align: left;
             margin-bottom: 25px;
-            color: #ffffff;
+            color: var(--text-main);
             font-weight: 700;
             font-size: 1.8rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        /* Unit Toggle Switch */
         .toggle-container {
             display: flex;
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--input-bg);
             border-radius: 12px;
             margin-bottom: 20px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--input-border);
         }
 
         .toggle-btn {
@@ -71,10 +118,9 @@
             padding: 10px;
             text-align: center;
             cursor: pointer;
-            transition: 0.3s;
             font-weight: 600;
             font-size: 14px;
-            color: #888;
+            color: var(--text-muted);
         }
 
         .toggle-btn.active {
@@ -82,27 +128,15 @@
             color: white;
         }
 
-        .row-group {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .input-group {
-            flex: 1;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .row-group .input-group {
-            margin-bottom: 0;
-        }
+        .row-group { display: flex; gap: 15px; margin-bottom: 20px; }
+        .input-group { flex: 1; margin-bottom: 20px; position: relative; }
+        .row-group .input-group { margin-bottom: 0; }
 
         label {
             display: block;
             margin-bottom: 8px;
-            color: #b3b3b3;
-            font-size: 13px;
+            color: var(--text-muted);
+            font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -111,35 +145,30 @@
         input, select {
             width: 100%;
             padding: 14px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
             border-radius: 12px;
-            color: white;
+            color: var(--text-main);
             font-size: 15px;
-            transition: all 0.3s;
             appearance: none;
         }
 
         select option {
-            background: #203a43;
-            color: white;
+            background: var(--card-bg);
+            color: var(--text-main);
         }
 
         input:focus, select:focus {
             outline: none;
             border-color: #00d2ff;
-            background: rgba(0, 0, 0, 0.4);
             box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
         }
 
-        /* Live Converter Hint */
         .conversion-hint {
             font-size: 12px;
             color: #00d2ff;
             margin-top: 6px;
             font-weight: 500;
-            display: flex;
-            justify-content: space-between;
         }
 
         button.calc-btn {
@@ -149,41 +178,30 @@
             color: white;
             border: none;
             border-radius: 12px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
             margin-top: 5px;
             box-shadow: 0 8px 20px rgba(58, 123, 213, 0.4);
         }
 
-        button.calc-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(58, 123, 213, 0.6);
-        }
+        button.calc-btn:hover { transform: translateY(-3px); }
 
-        /* Error Shake Animation */
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b) !important;
+        }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
             75% { transform: translateX(10px); }
         }
-        .error-shake {
-            animation: shake 0.4s ease-in-out;
-            background: linear-gradient(45deg, #ff416c, #ff4b2b) !important;
-            box-shadow: 0 8px 20px rgba(255, 65, 108, 0.4) !important;
-        }
 
         /* Result Area */
         .result-area {
             margin-top: 30px;
-            text-align: center;
             display: none;
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            background: rgba(0, 0, 0, 0.2);
-            padding: 25px 20px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: slideUp 0.6s ease;
         }
 
         @keyframes slideUp {
@@ -191,119 +209,97 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .result-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
         .bmi-value {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 700;
             margin: 5px 0;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            line-height: 1;
         }
 
         .bmi-category {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
         }
 
-        /* Gauge */
-        .gauge-container {
-            position: relative;
-            margin-bottom: 25px;
-        }
-        .gauge-track {
-            width: 100%;
-            height: 14px;
-            background: #2a2a2a;
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-        }
-        .gauge-zones {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to right, 
-                #3498db 0%, #3498db 14%, 
-                #2ecc71 14%, #2ecc71 40%, 
-                #f1c40f 40%, #f1c40f 60%, 
-                #e74c3c 60%, #e74c3c 100% 
-            );
-            opacity: 0.3;
-        }
-        .gauge-marker {
-            position: absolute;
-            top: -4px;
-            height: 22px;
-            width: 6px;
-            background: #ffffff;
-            border-radius: 3px;
-            box-shadow: 0 0 8px rgba(255,255,255,0.8);
-            left: 0%; 
-            transition: left 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 2;
-        }
-
-        /* Detailed Stats Grid */
+        /* Stats Grid */
         .detailed-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 25px;
         }
 
         .stat-box {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
+            background: var(--stat-bg);
+            padding: 15px;
             border-radius: 12px;
-            text-align: left;
             border-left: 3px solid #00d2ff;
         }
 
-        .stat-box.full-width {
-            grid-column: span 2;
-        }
-
-        .stat-box p {
-            margin: 0;
-            font-size: 11px;
-            color: #b3b3b3;
-            text-transform: uppercase;
-        }
-
-        .stat-box strong {
-            display: block;
-            font-size: 15px;
-            color: #fff;
-            margin-top: 3px;
-        }
-
-        .tips {
+        .stat-box.full { grid-column: span 2; }
+        .stat-box p { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+        .stat-box strong { font-size: 16px; color: var(--text-main); }
+        
+        .macro-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
             font-size: 13px;
-            color: #d1d1d1;
-            line-height: 1.6;
-            margin-top: 15px;
-            background: rgba(0,0,0,0.15);
-            padding: 15px;
-            border-radius: 10px;
+            color: var(--text-main);
+            font-weight: 600;
         }
+        .macro-row span { padding: 4px 8px; border-radius: 6px; background: rgba(0,0,0,0.2); }
+
+        /* Diet Section */
+        .diet-section {
+            background: var(--diet-bg);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--input-border);
+        }
+
+        .diet-section h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+        }
+
+        .meal-item {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--input-border);
+        }
+        .meal-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        
+        .meal-time { font-size: 12px; color: #00d2ff; font-weight: 700; text-transform: uppercase; }
+        .meal-desc { font-size: 14px; color: var(--text-main); margin-top: 4px; }
     </style>
 </head>
 <body>
 
     <div class="dashboard-card">
-        <h2>⚡ Smart BMI Pro</h2>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀️ Light Mode</button>
+        <h2>⚡ Health Planner Pro</h2>
         
         <!-- Unit Toggle -->
         <div class="toggle-container">
-            <div class="toggle-btn active" id="btnMetric" onclick="setUnit('metric')">Metric (kg/cm)</div>
-            <div class="toggle-btn" id="btnImperial" onclick="setUnit('imperial')">Imperial (lbs/ft)</div>
+            <div class="toggle-btn active" id="btnMetric" onclick="setUnit('metric')">Metric</div>
+            <div class="toggle-btn" id="btnImperial" onclick="setUnit('imperial')">Imperial</div>
         </div>
 
-        <!-- Demographics -->
+        <!-- Demographics & Activity -->
         <div class="row-group">
             <div class="input-group">
                 <label>Age (Years)</label>
-                <input type="number" id="age" placeholder="e.g. 30" min="2" max="120">
+                <input type="number" id="age" placeholder="e.g. 30" min="15" max="100">
             </div>
             <div class="input-group">
                 <label>Gender</label>
@@ -312,6 +308,17 @@
                     <option value="female">Female</option>
                 </select>
             </div>
+        </div>
+
+        <div class="input-group">
+            <label>Daily Activity Level</label>
+            <select id="activity">
+                <option value="1.2">Sedentary (Little/No exercise)</option>
+                <option value="1.375">Lightly Active (Exercise 1-3 days/week)</option>
+                <option value="1.55">Moderately Active (Exercise 3-5 days/week)</option>
+                <option value="1.725">Very Active (Exercise 6-7 days/week)</option>
+                <option value="1.9">Extra Active (Very hard exercise/physical job)</option>
+            </select>
         </div>
 
         <!-- Height Input -->
@@ -331,7 +338,6 @@
                 <input type="number" id="heightIn" placeholder="8" oninput="updateLiveConversions()">
             </div>
         </div>
-        <!-- Moved hint out of flex row to span full width -->
         <div class="conversion-hint" id="hintHeightImp" style="display:none; margin-top:-15px; margin-bottom:20px;">≈ 172.7 cm</div>
 
         <!-- Weight Input -->
@@ -341,249 +347,239 @@
             <div class="conversion-hint" id="hintWeight">≈ 154.3 lbs</div>
         </div>
 
-        <button class="calc-btn" id="calcBtn" onclick="calculateBMI()">Analyze Health Data</button>
+        <button class="calc-btn" id="calcBtn" onclick="calculatePlan()">Generate Complete Plan</button>
 
-        <!-- Advanced Visual Result Section -->
+        <!-- Result Section -->
         <div class="result-area" id="resultBox">
             
-            <div class="gauge-container">
-                <div class="gauge-track">
-                    <div class="gauge-zones"></div>
-                </div>
-                <div class="gauge-marker" id="gaugeMarker"></div>
+            <div class="result-header">
+                <div class="bmi-category" id="bmiStatus">Status</div>
+                <div class="bmi-value" id="bmiNumber">0.0</div>
             </div>
             
-            <div class="bmi-value" id="bmiNumber">0.0</div>
-            <div class="bmi-category" id="bmiStatus">Status</div>
-            
-            <!-- Detailed Stats Area -->
             <div class="detailed-stats">
-                <div class="stat-box full-width">
-                    <p>Healthy Weight Target</p>
-                    <strong id="idealWeightText">-- kg to -- kg</strong>
-                </div>
                 <div class="stat-box">
                     <p>Base Metabolism (BMR)</p>
-                    <strong id="bmrText">-- kcal/day</strong>
+                    <strong id="bmrText">-- kcal</strong>
                 </div>
                 <div class="stat-box">
-                    <p>Age Insight</p>
-                    <strong id="ageInsightText">--</strong>
+                    <p>Daily Energy Exp. (TDEE)</p>
+                    <strong id="tdeeText">-- kcal</strong>
+                </div>
+                
+                <div class="stat-box full">
+                    <p>Your Daily Calorie Target (<span id="goalText">--</span>)</p>
+                    <strong id="targetCalText" style="font-size: 22px; color: #00d2ff;">-- kcal</strong>
+                    <div class="macro-row">
+                        <span id="protText">🍖 --g</span>
+                        <span id="carbText">🍚 --g</span>
+                        <span id="fatText">🥑 --g</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="tips" id="healthTip"></div>
+            <!-- Dynamic Diet Section -->
+            <div class="diet-section">
+                <h3>🍽️ Sample Meal Plan</h3>
+                <div id="dietPlanContent">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
         let currentUnit = 'metric';
 
+        // Theme Toggle Logic
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.getElementById('themeBtn');
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.setAttribute('data-theme', 'light');
+                btn.innerText = "🌙 Dark Mode";
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                btn.innerText = "☀️ Light Mode";
+            }
+        }
+
+        // Unit Toggle Logic
         function setUnit(unit) {
             currentUnit = unit;
             document.getElementById('resultBox').style.display = 'none';
-            
-            // Clear inputs
             document.getElementById('weight').value = '';
             document.getElementById('heightCm').value = '';
             document.getElementById('heightFt').value = '';
             document.getElementById('heightIn').value = '';
-            
-            // Reset Hints
             document.getElementById('hintWeight').innerText = "Enter weight to convert";
-            document.getElementById('hintHeightCm').innerText = "Enter height to convert";
-            document.getElementById('hintHeightImp').innerText = "Enter height to convert";
 
             if (unit === 'metric') {
                 document.getElementById('btnMetric').classList.add('active');
                 document.getElementById('btnImperial').classList.remove('active');
-                
                 document.getElementById('heightMetricWrapper').style.display = 'block';
                 document.getElementById('heightImperialWrapper').style.display = 'none';
                 document.getElementById('hintHeightImp').style.display = 'none';
-                
+                document.getElementById('hintHeightCm').style.display = 'block';
                 document.getElementById('lblWeight').innerText = "Weight (Kilograms)";
                 document.getElementById('weight').placeholder = "e.g. 70";
             } else {
                 document.getElementById('btnImperial').classList.add('active');
                 document.getElementById('btnMetric').classList.remove('active');
-                
                 document.getElementById('heightMetricWrapper').style.display = 'none';
                 document.getElementById('heightImperialWrapper').style.display = 'flex';
                 document.getElementById('hintHeightImp').style.display = 'block';
-                
+                document.getElementById('hintHeightCm').style.display = 'none';
                 document.getElementById('lblWeight').innerText = "Weight (Pounds)";
                 document.getElementById('weight').placeholder = "e.g. 150";
             }
         }
 
-        // Live calculator / Converter feature
+        // Live Converter
         function updateLiveConversions() {
             let weightInput = parseFloat(document.getElementById('weight').value);
-            
-            // Weight Conversion
             if (!isNaN(weightInput) && weightInput > 0) {
                 if (currentUnit === 'metric') {
-                    let lbs = (weightInput * 2.20462).toFixed(1);
-                    document.getElementById('hintWeight').innerText = `≈ ${lbs} lbs`;
+                    document.getElementById('hintWeight').innerText = `≈ ${(weightInput * 2.20462).toFixed(1)} lbs`;
                 } else {
-                    let kg = (weightInput / 2.20462).toFixed(1);
-                    document.getElementById('hintWeight').innerText = `≈ ${kg} kg`;
+                    document.getElementById('hintWeight').innerText = `≈ ${(weightInput / 2.20462).toFixed(1)} kg`;
                 }
-            } else {
-                document.getElementById('hintWeight').innerText = "";
-            }
+            } else { document.getElementById('hintWeight').innerText = ""; }
 
-            // Height Conversion
             if (currentUnit === 'metric') {
                 let cmInput = parseFloat(document.getElementById('heightCm').value);
                 if (!isNaN(cmInput) && cmInput > 0) {
-                    let totalInches = cmInput / 2.54;
-                    let feet = Math.floor(totalInches / 12);
-                    let inches = (totalInches % 12).toFixed(1);
-                    document.getElementById('hintHeightCm').innerText = `≈ ${feet}' ${inches}"`;
-                } else {
-                    document.getElementById('hintHeightCm').innerText = "";
-                }
+                    let totalIn = cmInput / 2.54;
+                    document.getElementById('hintHeightCm').innerText = `≈ ${Math.floor(totalIn / 12)}' ${(totalIn % 12).toFixed(1)}"`;
+                } else { document.getElementById('hintHeightCm').innerText = ""; }
             } else {
                 let ftInput = parseFloat(document.getElementById('heightFt').value) || 0;
                 let inInput = parseFloat(document.getElementById('heightIn').value) || 0;
                 if (ftInput > 0 || inInput > 0) {
-                    let totalCm = ((ftInput * 12) + inInput) * 2.54;
-                    document.getElementById('hintHeightImp').innerText = `≈ ${totalCm.toFixed(1)} cm`;
-                } else {
-                    document.getElementById('hintHeightImp').innerText = "";
-                }
+                    document.getElementById('hintHeightImp').innerText = `≈ ${(((ftInput * 12) + inInput) * 2.54).toFixed(1)} cm`;
+                } else { document.getElementById('hintHeightImp').innerText = ""; }
             }
         }
 
-        function triggerError() {
-            const btn = document.getElementById('calcBtn');
-            btn.classList.add('error-shake');
-            btn.innerText = "Please fill all fields!";
-            setTimeout(() => {
-                btn.classList.remove('error-shake');
-                btn.innerText = "Analyze Health Data";
-            }, 1000);
-        }
-
-        function calculateBMI() {
+        // Main Calculation Function
+        function calculatePlan() {
             let weight = parseFloat(document.getElementById('weight').value);
             let age = parseInt(document.getElementById('age').value);
             let gender = document.getElementById('gender').value;
-            let heightMeters = 0;
-            let heightCm = 0;
-            let weightKg = 0;
+            let activity = parseFloat(document.getElementById('activity').value);
 
-            // Validation
             if (isNaN(weight) || isNaN(age) || weight <= 0 || age <= 0) {
-                triggerError();
+                const btn = document.getElementById('calcBtn');
+                btn.classList.add('error-shake');
+                btn.innerText = "Please fill all fields!";
+                setTimeout(() => { btn.classList.remove('error-shake'); btn.innerText = "Generate Complete Plan"; }, 1000);
                 return;
             }
 
-            // Parse heights based on unit and get standard metric values for complex math
-            if (currentUnit === 'metric') {
-                heightCm = parseFloat(document.getElementById('heightCm').value);
-                if (isNaN(heightCm) || heightCm <= 0) { triggerError(); return; }
-                
-                heightMeters = heightCm / 100;
-                weightKg = weight;
-            } else {
-                let feet = parseFloat(document.getElementById('heightFt').value) || 0;
-                let inches = parseFloat(document.getElementById('heightIn').value) || 0;
-                let totalInches = (feet * 12) + inches;
-                
-                if (totalInches <= 0) { triggerError(); return; }
-                
-                heightCm = totalInches * 2.54;
-                heightMeters = heightCm / 100;
-                weightKg = weight / 2.20462; // Convert lbs to kg
-            }
-
-            // 1. BMI Calculation
-            let bmi = weightKg / (heightMeters * heightMeters);
-            bmi = parseFloat(bmi.toFixed(1));
-
-            // 2. Ideal Weight Range Calculation
-            let minWeightKg = 18.5 * (heightMeters * heightMeters);
-            let maxWeightKg = 24.9 * (heightMeters * heightMeters);
-            let idealWeightText = "";
+            let heightCm = currentUnit === 'metric' ? parseFloat(document.getElementById('heightCm').value) : 
+                           (((parseFloat(document.getElementById('heightFt').value) || 0) * 12) + (parseFloat(document.getElementById('heightIn').value) || 0)) * 2.54;
             
-            if (currentUnit === 'metric') {
-                idealWeightText = `${minWeightKg.toFixed(1)} kg - ${maxWeightKg.toFixed(1)} kg`;
-            } else {
-                let minLbs = minWeightKg * 2.20462;
-                let maxLbs = maxWeightKg * 2.20462;
-                idealWeightText = `${minLbs.toFixed(1)} lbs - ${maxLbs.toFixed(1)} lbs`;
-            }
+            let weightKg = currentUnit === 'metric' ? weight : weight / 2.20462;
+            let heightMeters = heightCm / 100;
 
-            // 3. BMR (Basal Metabolic Rate) - Mifflin-St Jeor Equation
-            let bmr = 0;
-            if (gender === 'male') {
-                bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) + 5;
-            } else {
-                bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) - 161;
-            }
+            if (isNaN(heightCm) || heightCm <= 0) return;
 
-            // 4. Age-Specific Insights
-            let ageInsight = "Standard Adult BMI Scale applies.";
-            if (age < 18) {
-                ageInsight = "Teens should use BMI percentiles, not standard adult scales.";
-            } else if (age >= 65) {
-                ageInsight = "For seniors, slightly higher BMI (25-27) may be healthier.";
-            }
+            // BMI Calculation
+            let bmi = (weightKg / (heightMeters * heightMeters)).toFixed(1);
 
-            // 5. Categorization and Colors
+            // BMR Calculation (Mifflin-St Jeor)
+            let bmr = gender === 'male' ? (10 * weightKg) + (6.25 * heightCm) - (5 * age) + 5 
+                                        : (10 * weightKg) + (6.25 * heightCm) - (5 * age) - 161;
+            
+            // TDEE Calculation
+            let tdee = bmr * activity;
+
+            // Determine Target Calories & Goal based on BMI
+            let targetCals = tdee;
             let category = "";
             let color = "";
-            let tip = "";
+            let goalStr = "";
+            let dietType = "";
 
             if (bmi < 18.5) {
-                category = "Underweight 🧊";
-                color = "#3498db";
-                tip = `To reach a healthier weight safely, aim to consume slightly more than your BMR (${Math.round(bmr + 300)} - ${Math.round(bmr + 500)} kcal/day). Focus on nutrient-dense foods like nuts, avocados, and proteins.`;
+                category = "Underweight"; color = "#3498db"; goalStr = "Weight Gain";
+                targetCals = tdee + 500; // Surplus
+                dietType = "bulk";
             } else if (bmi >= 18.5 && bmi <= 24.9) {
-                category = "Normal Weight ✅";
-                color = "#2ecc71";
-                tip = `Excellent! You are in the healthy range. Maintaining a daily intake around your metabolic rate + daily activity expenditure will keep you balanced.`;
+                category = "Normal Weight"; color = "#2ecc71"; goalStr = "Maintenance";
+                targetCals = tdee; // Maintenance
+                dietType = "maintain";
             } else if (bmi >= 25 && bmi <= 29.9) {
-                category = "Overweight ⚠️";
-                color = "#f1c40f";
-                tip = `Consider a slight caloric deficit. Eating around ${Math.round(bmr)} kcal/day while increasing daily movement (like walking or cycling) can help achieve steady, sustainable results.`;
+                category = "Overweight"; color = "#f1c40f"; goalStr = "Weight Loss";
+                targetCals = tdee - 500; // Deficit
+                dietType = "cut";
             } else {
-                category = "Obese 🚨";
-                color = "#e74c3c";
-                tip = `Prioritize your long-term health. Knowing your BMR is a great first step. Consider consulting a healthcare provider to craft a nutrition plan tailored specifically to your needs.`;
+                category = "Obese"; color = "#e74c3c"; goalStr = "Aggressive Loss";
+                targetCals = tdee - 750; // Larger Deficit
+                dietType = "cut";
             }
 
-            // Calculate Gauge Marker Position
-            let minScale = 15;
-            let maxScale = 40;
-            let percentage = ((bmi - minScale) / (maxScale - minScale)) * 100;
-            if (percentage < 0) percentage = 0;
-            if (percentage > 100) percentage = 100;
+            // Macros (Protein: 30%, Carbs: 40%, Fats: 30%)
+            let proteinGrams = Math.round((targetCals * 0.30) / 4);
+            let carbsGrams = Math.round((targetCals * 0.40) / 4);
+            let fatsGrams = Math.round((targetCals * 0.30) / 9);
 
-            // 6. Update UI
+            // Update UI
             document.getElementById('bmiNumber').innerText = bmi;
             document.getElementById('bmiNumber').style.color = color;
+            document.getElementById('bmiStatus').innerText = category;
+            document.getElementById('bmiStatus').style.color = color;
             
-            let statusElement = document.getElementById('bmiStatus');
-            statusElement.innerText = category;
-            statusElement.style.color = color;
-            
-            document.getElementById('idealWeightText').innerText = idealWeightText;
-            document.getElementById('bmrText').innerText = `${Math.round(bmr)} kcal/day`;
-            document.getElementById('ageInsightText').innerText = ageInsight;
-            document.getElementById('healthTip').innerText = tip;
+            document.getElementById('bmrText').innerText = Math.round(bmr) + " kcal";
+            document.getElementById('tdeeText').innerText = Math.round(tdee) + " kcal";
+            document.getElementById('targetCalText').innerText = Math.round(targetCals) + " kcal";
+            document.getElementById('goalText').innerText = goalStr;
 
-            // Gauge Styling
-            document.getElementById('gaugeMarker').style.left = percentage + "%";
-            document.getElementById('gaugeMarker').style.backgroundColor = color;
-            document.getElementById('gaugeMarker').style.boxShadow = `0 0 10px ${color}`;
+            document.getElementById('protText').innerText = `🍖 ${proteinGrams}g Pro`;
+            document.getElementById('carbText').innerText = `🍚 ${carbsGrams}g Carb`;
+            document.getElementById('fatText').innerText = `🥑 ${fatsGrams}g Fat`;
 
-            // Show result
+            generateDietPlan(dietType, Math.round(targetCals));
+
             document.getElementById('resultBox').style.display = "block";
-            document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Generate Sample Diet Plan based on Goal
+        function generateDietPlan(type, calories) {
+            let meals = {};
+
+            if (type === "cut") {
+                meals = {
+                    breakfast: "Scrambled egg whites with spinach, tomatoes, and 1 slice of whole-grain toast. Black coffee or green tea.",
+                    lunch: "Large mixed green salad with grilled chicken breast, cucumber, cherry tomatoes, and a light vinaigrette.",
+                    snack: "Greek yogurt (non-fat) with a handful of berries or a protein shake mixed with water.",
+                    dinner: "Baked white fish or tofu, a large portion of steamed broccoli, and a small serving of quinoa."
+                };
+            } else if (type === "bulk") {
+                meals = {
+                    breakfast: "Oatmeal cooked with whole milk, topped with peanut butter, banana slices, chia seeds, and 2 whole eggs on the side.",
+                    lunch: "Whole wheat wrap with grilled chicken/steak, avocado, cheese, and a side of mixed nuts.",
+                    snack: "High-calorie protein shake (protein powder, milk, banana, oats, and peanut butter).",
+                    dinner: "Salmon or beef steak, large portion of sweet potato or brown rice, roasted olive-oil veggies."
+                };
+            } else {
+                meals = {
+                    breakfast: "2 whole eggs scrambled, 1 slice whole-wheat toast, and a piece of fruit (apple or orange).",
+                    lunch: "Grilled chicken or chickpeas with quinoa, mixed vegetables, and a drizzle of olive oil.",
+                    snack: "A handful of almonds and a low-sugar greek yogurt.",
+                    dinner: "Baked salmon or grilled tofu, a side of brown rice, and steamed asparagus."
+                };
+            }
+
+            const dietHTML = `
+                <div class="meal-item"><div class="meal-time">Breakfast (~${Math.round(calories*0.25)} kcal)</div><div class="meal-desc">${meals.breakfast}</div></div>
+                <div class="meal-item"><div class="meal-time">Lunch (~${Math.round(calories*0.30)} kcal)</div><div class="meal-desc">${meals.lunch}</div></div>
+                <div class="meal-item"><div class="meal-time">Snack (~${Math.round(calories*0.15)} kcal)</div><div class="meal-desc">${meals.snack}</div></div>
+                <div class="meal-item"><div class="meal-time">Dinner (~${Math.round(calories*0.30)} kcal)</div><div class="meal-desc">${meals.dinner}</div></div>
+            `;
+            document.getElementById('dietPlanContent').innerHTML = dietHTML;
         }
     </script>
 </body>
